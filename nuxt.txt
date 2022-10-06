@@ -1,0 +1,22 @@
+télécharger node js
+
+C:\Users\Yllan\Desktop>cd NuxtProjetYllan
+
+🎉  Successfully created project NuxtProjetYllan
+
+  To get started:
+
+        cd NuxtProjetYllan
+        npm run dev
+
+  To build & start for production:
+
+        cd NuxtProjetYllan
+        npm run build
+        npm run start
+
+
+
+
+cd Desktop\NuxtProjetYllan
+npm run dev
