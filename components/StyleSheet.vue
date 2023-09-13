@@ -25,4 +25,16 @@
     {
         display: none;
     }
+    td
+    {
+        padding: 20px;
+        border: 1px solid #00000090;
+    }
+    th
+    {
+        text-transform: uppercase;
+        letter-spacing: 2Px;
+        font-size: 10Px;
+        padding: 10px;
+    }
 </style>
