@@ -31,6 +31,7 @@
             <td>{{ round(totalPrixHorsSoldes) }}€</td>
           </tr>
         </tfoot>
+        <a v-bind:href="lienBundle" class="absBundle" target="_blank">Lien vers le bundle</a>
       </table>
     </div>
   </template>
@@ -41,6 +42,7 @@
       groupName: String, // Le nom du groupe de jeux
       games: Array, // Les jeux du groupe
       prixTotalPaye: Number, // Prix total payé pour tous les jeux du groupe
+      lienBundle: String, // Prix total payé pour tous les jeux du groupe
     },
     computed:{
         prixPayeParJeu() {

@@ -25,6 +25,10 @@
     {
         display: none;
     }
+    table
+    {
+        position: relative;
+    }
     td
     {
         padding: 20px;
@@ -36,5 +40,22 @@
         letter-spacing: 2Px;
         font-size: 10Px;
         padding: 10px;
+    }
+    /* ----------- */
+    .absBundle
+    {
+        position: absolute;
+        bottom: 0;
+        left: 0px;
+        transform: rotate(-90deg);
+        transform-origin: bottom left;
+        background: #ececec;
+        padding: 20px 40px;
+        transition: all 0.4s;
+    }
+    .absBundle:hover
+    {
+        background: #111;
+        color: #fff;
     }
 </style>
