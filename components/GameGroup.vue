@@ -65,7 +65,7 @@
   methods: {
     round(value) {
       // Utilisation de Math.round() pour arrondir le prix payé par jeu
-      return Math.round(value);
+      return parseFloat(value).toFixed(2);
     }
     },
   };
