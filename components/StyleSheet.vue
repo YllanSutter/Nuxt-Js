@@ -13,6 +13,10 @@
 </script>
 
 <style >
+    body
+    {
+        font-family: 'Dosis', sans-serif;
+    }
     .boite *
     {
         pointer-events: none;
@@ -25,14 +29,35 @@
     {
         display: none;
     }
+    .border-b-2 
+    {
+        border-color: #ffffff50;
+        border-bottom-width: 1Px;
+    }
     table
     {
         position: relative;
+        z-index: 1;
+        background: rgba(255, 255, 255, 0.25);
+        border-radius: 16px;
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
+        color: #fff;
+        font-family: 'Dosis', sans-serif;
     }
     td
     {
         padding: 20px;
-        border: 1px solid #00000090;
+        border: 1px solid #ffffff12;
+    }
+    td:not(:first-child),th:not(:first-child)
+    {
+        text-align: right;
+    }
+    td:hover
+    {
+        background: #ffffff12;
     }
     th
     {
@@ -49,7 +74,6 @@
         left: 0px;
         transform: rotate(-90deg);
         transform-origin: bottom left;
-        background: #ececec;
         padding: 20px 40px;
         transition: all 0.4s;
     }
@@ -58,4 +82,17 @@
         background: #111;
         color: #fff;
     }
+    body::before
+    {
+        content : "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        background: url(../assets/background.jpg);
+        filter: brightness(0.095);
+        z-index: -1;
+    }
+
 </style>

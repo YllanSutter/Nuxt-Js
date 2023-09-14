@@ -4,7 +4,7 @@
     <Entetesecondaire />
     <StyleSheet />
     <ArticleElem
-      titreElem="Septembre 2023"
+      titreElem="Août 2023"
       contenuElem="Dépenses & revenu de tous les jeux du mois"
     />
     <div class="grid justify-center p-10">
@@ -66,63 +66,81 @@ export default {
     return {
       gameGroups: [
         {
-          groupName: "Humble Choice - September 2023",
+          groupName: "Take your turn",
           games: [
-        {
-          name: "TINY TINA'S WONDERLANDS CHAOTIC GREAT EDITION",
-          prixPlusBas: 20,
-          prixPlusBasMarcheNoir: 20,
-          prixHorsSoldes : 79.99
+         {
+          name: "Song of conquest",
+          prixPlusBas: 14.99,
+          prixPlusBasMarcheNoir: 10.74,
+          prixHorsSoldes :  29.99
         },
         {
-          name: "DECEIVE INC.",
-          prixPlusBas: 10.67,
-          prixPlusBasMarcheNoir: 8.49,
-          prixHorsSoldes : 20
+          name: "Banner saga trilogy deluxe pack",
+          prixPlusBas: 11.80,
+          prixPlusBasMarcheNoir: 6.44,
+          prixHorsSoldes :  64.15
         },
         {
-          name: "THE FORGOTTEN CITY",
-          prixPlusBas: 8.74,
-          prixPlusBasMarcheNoir: 10.61,
-          prixHorsSoldes : 24.99
+          name: "Immortal realms : vampire wars",
+          prixPlusBas: 13.79,
+          prixPlusBasMarcheNoir: 2.89,
+          prixHorsSoldes :  29.99
         },
         {
-          name: "ACES & ADVENTURES",
-          prixPlusBas: 10.05,
-          prixPlusBasMarcheNoir: 6.52,
+          name: "Before we leave",
+          prixPlusBas: 3.43,
+          prixPlusBasMarcheNoir: 1.59,
+          prixHorsSoldes : 17.99
+        },
+        {
+          name: "Supraland",
+          prixPlusBas: 9.99,
+          prixPlusBasMarcheNoir: 1.63,
+          prixHorsSoldes : 19.99
+        },
+        {
+          name: "Unexplored 2",
+          prixPlusBas:  15.42,
+          prixPlusBasMarcheNoir: 1.07,
           prixHorsSoldes : 19.50
         },
         {
-          name: "PATCH QUEST",
-          prixPlusBas: 5.97,
-          prixPlusBasMarcheNoir: 3.34,
-          prixHorsSoldes : 14.99
+          name: "Spirit Hunter NG",
+          prixPlusBas: 17.21,
+          prixPlusBasMarcheNoir: 2.72,
+          prixHorsSoldes : 41.99
         },
         {
-          name: "FORETALES",
-          prixPlusBas: 10.29,
-          prixPlusBasMarcheNoir: 12.31,
-          prixHorsSoldes : 19.99
+          name: "TOEM",
+          prixPlusBas: 15.99,
+          prixPlusBasMarcheNoir: 0.89,
+          prixHorsSoldes : 19.50
         },
         {
-          name: "WHO PRESSED MUTE ON UNCLE MARCUS",
-          prixPlusBas: 4.43,
-          prixPlusBasMarcheNoir: 6.20,
-          prixHorsSoldes : 14.79
+          name: "Alien fireteam elite",
+          prixPlusBas: 11.85,
+          prixPlusBasMarcheNoir: 4.13 ,
+          prixHorsSoldes : 29.99
         },
         {
-          name: "AUTONAUTS VS PIRATEBOTS",
-          prixPlusBas: 5.39,
-          prixPlusBasMarcheNoir: 2.14,
-          prixHorsSoldes : 19.99
+          name: "Alien fireteam elite",
+          prixPlusBas: 11.85,
+          prixPlusBasMarcheNoir: 4.13 ,
+          prixHorsSoldes : 29.99
+        },
+        {
+          name: "Spellcaster university",
+          prixPlusBas: 16.79,
+          prixPlusBasMarcheNoir: 2.10,
+          prixHorsSoldes : 20.99
         },
         // Ajoutez d'autres jeux avec leurs informations ici
       ],
-      prixTotalPaye: 9.99, // Prix total payé pour tous les jeux
-      lienBundle : 'https://www.humblebundle.com/membership/september-2023',
-      nombrejeuxbundle : 5,
-      nombrejeuxvoulus : 5,
-      nombrejeuxachetables : 5,
+      prixTotalPaye: 18.18, // Prix total payé pour tous les jeux
+      lienBundle : 'https://www.humblebundle.com/games/take-your-turn-tactics-rpgs',
+      nombrejeuxbundle : 8,
+      nombrejeuxvoulus : 4,
+      nombrejeuxachetables : 1,
       },
       // {
       //   groupName: "Groupe 2",
