@@ -74,25 +74,7 @@
         // Utilisation de Math.round() pour arrondir le prix payé par jeu
         return parseFloat(value).toFixed(2);
       },
-      addNewGame() {
-    // Créez un nouvel objet de jeu et ajoutez-le au tableau
-    const newGame = {
-      name: 'Nouveau jeu',
-      prixPaye: 0,
-      prixPlusBas: 0,
-      prixPlusBasMarcheNoir: 0,
-      prixHorsSoldes: 0,
-    };
-    this.addGame(newGame);
-  },
-  removeGame(index) {
-    // Supprimez un jeu en utilisant son index dans le tableau
-    this.deleteGame(index);
-  },
-  updateGameDetails(index, updatedGame) {
-    // Mettez à jour les détails d'un jeu en utilisant son index et l'objet mis à jour
-    this.updateGame({ index, game: updatedGame });
-  },
+    
     },
   };
   </script>
