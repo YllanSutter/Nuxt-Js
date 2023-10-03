@@ -1,8 +1,8 @@
 <template>
     <div>
       <h2 class="text-white tracking-wider text-2xl text-center pt-10 pb-5">{{ groupName }}</h2>
-      <div class="text-white flex gap-x-5 pb-10 justify-center">
-        <p>Nombres de jeux du bundle : {{ nombrejeuxbundle }}</p> /  <p>Nombres de jeux voulus : {{ nombrejeuxbundle }}</p> /  <p>Nombres de jeux que j'aurais pu acheter : {{ nombrejeuxachetables }}</p>
+      <div  v-if="bundle" class="text-white flex gap-x-5 pb-10 justify-center">
+        <p>Nombres de jeux du bundle : {{ nombrejeuxbundle }}</p> /  <p>Nombres de jeux voulus : {{ nombrejeuxvoulus }}</p> /  <p>Nombres de jeux que j'aurais pu acheter : {{ nombrejeuxachetables }}</p>
       </div>
       <table>
         <!-- Tableau pour afficher les jeux du groupe -->
@@ -10,19 +10,22 @@
           <tr class="text-white">
             <th class="text-left">Nom</th>
             <th>Prix Payé</th>
-            <th>Prix le plus bas</th>
             <th>Prix le plus bas (Marché Noir)</th>
+            <th>Prix le plus bas</th>
             <th>Prix Hors Soldes</th>
           </tr>
         </thead>
         <tbody>
           <!-- Utilisation d'une boucle v-for pour afficher les jeux du groupe -->
           <tr v-for="(game, index) in games" :key="index">
-            <td>{{ game.name }}</td>
+            <td :class="game.statut+' statut'">
+              {{ game.name }}
+            </td>
             <td>{{ round(prixPayeParJeu) }}€</td>
-            <td>{{ game.prixPlusBas }}€</td>
             <td>{{ game.prixPlusBasMarcheNoir }}€</td>
+            <td>{{ game.prixPlusBas }}€</td>
             <td>{{ game.prixHorsSoldes }}€</td>
+            
            
           </tr>
         </tbody>
@@ -30,12 +33,12 @@
           <tr>
             <td>Total</td>
             <td>{{ round(prixTotalPaye) }}€</td>
-            <td>{{ round(totalPrixPlusBas) }}€</td>
             <td>{{ round(totalPrixPlusBasMarcheNoir) }}€</td>
+            <td>{{ round(totalPrixPlusBas) }}€</td>
             <td>{{ round(totalPrixHorsSoldes) }}€</td>
           </tr>
         </tfoot>
-        <a v-bind:href="lienBundle" class="absBundle bg-gray-900" target="_blank">Lien vers le bundle</a>
+        <a v-if="bundle" v-bind:href="lienBundle" class="absBundle bg-gray-900" target="_blank">Lien vers le bundle</a>
       </table>
     </div>
   </template>
@@ -47,6 +50,8 @@
       games: Array, // Les jeux du groupe
       prixTotalPaye: Number, // Prix total payé pour tous les jeux du groupe
       lienBundle: String, // Prix total payé pour tous les jeux du groupe
+      bundle: Boolean,
+      statut: String,
       nombrejeuxbundle: Number, // Prix total payé pour tous les jeux du groupe
       nombrejeuxvoulus: Number, // Prix total payé pour tous les jeux du groupe
       nombrejeuxachetables: Number, // Prix total payé pour tous les jeux du groupe

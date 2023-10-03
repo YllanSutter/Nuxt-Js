@@ -36,6 +36,8 @@
           :games="group.games"
           :prix-total-paye="group.prixTotalPaye"
           :lienBundle="group.lienBundle"
+          :bundle="group.bundle"
+          :statut="group.statut"
           :nombrejeuxbundle="group.nombrejeuxbundle"
           :nombrejeuxvoulus="group.nombrejeuxvoulus"
           :nombrejeuxachetables="group.nombrejeuxachetables"
@@ -65,145 +67,193 @@ export default {
   data() {
     return {
       gameGroups: [
-        {
+        {//groupe 1
           groupName: "Take your turn",
           games: [
          {
           name: "Song of conquest",
           prixPlusBas: 14.99,
           prixPlusBasMarcheNoir: 10.74,
-          prixHorsSoldes :  29.99
+          prixHorsSoldes :  29.99,
+          statut: 'keep'
         },
         {
           name: "Banner saga trilogy deluxe pack",
           prixPlusBas: 11.80,
           prixPlusBasMarcheNoir: 6.44,
-          prixHorsSoldes :  64.15
+          prixHorsSoldes :  64.15,
+          statut: 'keep'
         },
         {
-          name: "Immortal realms : vampire wars",
+          name: "Panzer Corps 2 => Immortal realms : vampire wars",
           prixPlusBas: 13.79,
           prixPlusBasMarcheNoir: 2.89,
-          prixHorsSoldes :  29.99
+          prixHorsSoldes :  29.99,
+          statut: 'traded'
         },
         {
-          name: "Before we leave",
+          name: "Jupiter Hell => Before we leave",
           prixPlusBas: 3.43,
           prixPlusBasMarcheNoir: 1.59,
-          prixHorsSoldes : 17.99
+          prixHorsSoldes : 17.99,
+          statut: 'traded'
         },
         {
-          name: "Supraland",
+          name: "Jack Move => Supraland",
           prixPlusBas: 9.99,
           prixPlusBasMarcheNoir: 1.63,
-          prixHorsSoldes : 19.99
+          prixHorsSoldes : 19.99,
+          statut: 'traded'
         },
         {
-          name: "Unexplored 2",
+          name: "Jupiter hell  => Unexplored 2",
           prixPlusBas:  15.42,
           prixPlusBasMarcheNoir: 1.07,
-          prixHorsSoldes : 19.50
+          prixHorsSoldes : 19.50,
+          statut: 'traded'
         },
         {
-          name: "Spirit Hunter NG",
+          name: "Jupiter hell => Spirit Hunter NG",
           prixPlusBas: 17.21,
           prixPlusBasMarcheNoir: 2.72,
-          prixHorsSoldes : 41.99
+          prixHorsSoldes : 41.99,
+          statut: 'traded'
         },
         {
-          name: "TOEM",
+          name: "Jack move => TOEM",
           prixPlusBas: 15.99,
           prixPlusBasMarcheNoir: 0.89,
-          prixHorsSoldes : 19.50
+          prixHorsSoldes : 19.50,
+          statut: 'traded'
         },
         {
-          name: "Alien fireteam elite",
+          name: "Coromon => Alien fireteam elite",
           prixPlusBas: 11.85,
           prixPlusBasMarcheNoir: 4.13 ,
-          prixHorsSoldes : 29.99
+          prixHorsSoldes : 29.99,
+          statut: 'traded'
         },
         {
-          name: "Alien fireteam elite",
+          name: "Coromon => Alien fireteam elite",
           prixPlusBas: 11.85,
           prixPlusBasMarcheNoir: 4.13 ,
-          prixHorsSoldes : 29.99
+          prixHorsSoldes : 29.99,
+          statut: 'traded'
         },
         {
-          name: "Spellcaster university",
+          name: "Panzer corps 2 => Spellcaster university",
           prixPlusBas: 16.79,
           prixPlusBasMarcheNoir: 2.10,
-          prixHorsSoldes : 20.99
+          prixHorsSoldes : 20.99,
+          statut: 'traded'
         },
         // Ajoutez d'autres jeux avec leurs informations ici
       ],
-      prixTotalPaye: 18.18, // Prix total payé pour tous les jeux
-      lienBundle : 'https://www.humblebundle.com/games/take-your-turn-tactics-rpgs',
-      nombrejeuxbundle : 8,
-      nombrejeuxvoulus : 4,
-      nombrejeuxachetables : 1,
+        prixTotalPaye: 18.18, // Prix total payé pour tous les jeux
+        lienBundle : 'https://www.humblebundle.com/games/take-your-turn-tactics-rpgs',
+        nombrejeuxbundle : 8,
+        nombrejeuxvoulus : 4,
+        bundle:true,
+        nombrejeuxachetables : 1,
       },
-      // {
-      //   groupName: "Groupe 2",
-      //   games: [
-      //   {
-      //     name: "TINY TINA'S WONDERLANDS CHAOTIC GREAT EDITION",
-      //     prixPlusBas: 20,
-      //     prixPlusBasMarcheNoir: 20,
-      //     prixHorsSoldes : 79.99
-      //   },
-      //   {
-      //     name: "DECEIVE INC.",
-      //     prixPlusBas: 10.67,
-      //     prixPlusBasMarcheNoir: 8.49,
-      //     prixHorsSoldes : 20
-      //   },
-      //   {
-      //     name: "THE FORGOTTEN CITY",
-      //     prixPlusBas: 8.74,
-      //     prixPlusBasMarcheNoir: 10.61,
-      //     prixHorsSoldes : 24.99
-      //   },
-      //   {
-      //     name: "ACES & ADVENTURES",
-      //     prixPlusBas: 10.05,
-      //     prixPlusBasMarcheNoir: 6.52,
-      //     prixHorsSoldes : 19.50
-      //   },
-      //   {
-      //     name: "PATCH QUEST",
-      //     prixPlusBas: 5.97,
-      //     prixPlusBasMarcheNoir: 3.34,
-      //     prixHorsSoldes : 14.99
-      //   },
-      //   {
-      //     name: "FORETALES",
-      //     prixPlusBas: 10.29,
-      //     prixPlusBasMarcheNoir: 12.31,
-      //     prixHorsSoldes : 19.99
-      //   },
-      //   {
-      //     name: "WHO PRESSED MUTE ON UNCLE MARCUS",
-      //     prixPlusBas: 4.43,
-      //     prixPlusBasMarcheNoir: 6.20,
-      //     prixHorsSoldes : 14.79
-      //   },
-      //   {
-      //     name: "AUTONAUTS VS PIRATEBOTS",
-      //     prixPlusBas: 5.39,
-      //     prixPlusBasMarcheNoir: 2.14,
-      //     prixHorsSoldes : 19.99
-      //   },
+       {//groupe 2
+        groupName: "Into game bundle",
+          games: [
+         {
+          name: "Arcade Spirits",
+          prixPlusBas: 14.08,
+          prixPlusBasMarcheNoir: 0.58 ,
+          prixHorsSoldes :  19.99,
+          statut: 'trade'
+        },
+        {
+          name: "Autonauts",
+          prixPlusBas: 5.49,
+          prixPlusBasMarcheNoir: 1.09,
+          prixHorsSoldes :  19.99,
+          statut: 'trade'
+        },
+        {
+          name: "Big Crown®: Showdown",
+          prixPlusBas: 2.59,
+          prixPlusBasMarcheNoir: 1.54,
+          prixHorsSoldes : 16.97,
+          statut: 'trade'
+        },
+        
+        {
+          name: "Little Orpheus",
+          prixPlusBas: 1.63,
+          prixPlusBasMarcheNoir: 0.97,
+          prixHorsSoldes : 10.36,
+          statut: 'trade'
+        },
+        {
+          name: "Tango Fiesta",
+          prixPlusBas: 8.29,
+          prixPlusBasMarcheNoir: 0.93,
+          prixHorsSoldes :9.99,
+          statut: 'trade'
+        },
+        {
+          name: "Attack of the Earthlings",
+          prixPlusBas: 3.35,
+          prixPlusBasMarcheNoir: 2.34 ,
+          prixHorsSoldes :  12.59,
+          statut: 'keep'
+        },
+        {
+          name: "Sable",
+          prixPlusBas: 9.99,
+          prixPlusBasMarcheNoir: 1.31,
+          prixHorsSoldes : 25,
+          statut: 'keep'
+        },
+        {
+          name: "Evil Genius 2: World Domination",
+          prixPlusBas: 7.49,
+          prixPlusBasMarcheNoir: 6.53,
+          prixHorsSoldes : 40,
+          statut: 'keep'
+        },
+        {
+          name: "West of Dead",
+          prixPlusBas: 1.69,
+          prixPlusBasMarcheNoir: 1.00,
+          prixHorsSoldes : 20,
+          statut: 'keep'
+        },
+        {
+          name: "Overcooked => Scarlet Tower",
+          prixPlusBas:  2.39,
+          prixPlusBasMarcheNoir: 1.17,
+          prixHorsSoldes : 4.00,
+          statut: 'traded'
+        },
+        {
+          name: "The Assembly => Behind the frame",
+          prixPlusBas: 2.94,
+          prixPlusBasMarcheNoir: 0.86,
+          prixHorsSoldes : 12.79,
+          statut: 'traded'
+        },
+        {
+          name: "Yooka-Laylee => Automachef",
+          prixPlusBas:  2.01,
+          prixPlusBasMarcheNoir:0.96 ,
+          prixHorsSoldes : 14.99,
+          statut: 'traded'
+        },
         // Ajoutez d'autres jeux avec leurs informations ici
       ],
-      // prixTotalPaye: 9.99, // Prix total payé pour tous les jeux
-      // lienBundle : 'https://www.humblebundle.com/membership/september-2023',
-      // nombrejeuxbundle : 5,
-      // nombrejeuxvoulus : 5,
-      // nombrejeuxachetables : 5,
-      //},
-      
-        // Ajoutez d'autres groupes de jeux ici
-      //],
+        prixTotalPaye: 7.99, // Prix total payé pour tous les jeux
+        lienBundle : 'https://www.fanatical.com/en/orders/64dfb2fe834e7e93e45b340a',
+        nombrejeuxbundle : 12,
+        nombrejeuxvoulus : 3,
+        bundle:true,
+        nombrejeuxachetables : 1,
+      },
+      ],
     };
   },
   computed: {

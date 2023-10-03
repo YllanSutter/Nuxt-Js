@@ -50,6 +50,19 @@
     {
         padding: 20px;
         border: 1px solid #ffffff12;
+        position: relative;
+    }
+    tr:last-child>td
+    {
+        border-bottom: none;
+    }
+    td:first-child
+    {
+        border-left: none;
+    }
+    td:last-child
+    {
+        border-right: none;
     }
     td:not(:first-child),th:not(:first-child)
     {
@@ -93,6 +106,51 @@
         background: url(../assets/background.jpg);
         filter: brightness(0.095);
         z-index: -1;
+    }
+    /* ----------- */
+    .statut
+    {
+        position: relative;
+    }
+    .statut::before
+    {
+        content: "";
+        opacity: 0.3;
+        position:absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        transition: all 0.4s;
+        z-index: -1;
+    }
+    .statut:hover::before
+    {
+        opacity: 0.6;
+    } 
+    .keep
+    {
+        border-bottom: 1Px solid #2f666a;
+    }
+    .trade
+    {
+        border-bottom: 1Px solid #6f4949;
+    }
+    .traded
+    {
+        border-bottom:  1Px solid #3c4b56;
+    }
+    .traded::before
+    {
+        background: #010f1e;
+    }
+   .trade::before
+    {
+        background: #700f0f;
+    }
+    .keep::before
+    {
+        background: #214c4c;
     }
 
 </style>

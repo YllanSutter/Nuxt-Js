@@ -4,7 +4,7 @@
     <Entetesecondaire />
     <StyleSheet />
     <ArticleElem
-      titreElem="Septembre 2023"
+      titreElem="Octobre 2023"
       contenuElem="Dépenses & revenu de tous les jeux du mois"
     />
     <div class="grid justify-center p-10">
@@ -67,91 +67,93 @@ export default {
     return {
       gameGroups: [
         {
-          groupName: "Humble Choice - September 2023",
+          groupName: "Awesome Indies from Humble Games",
           games: [
-            
         {
-          name: "PATCH QUEST",
-          prixPlusBas: 5.97,
-          prixPlusBasMarcheNoir: 3.34,
+          name: "Moonscars",
+          prixPlusBasMarcheNoir: 5.46,
+          prixPlusBas: 13.99,
+          prixHorsSoldes : 19.99,
+          statut: 'trade'
+        },
+        {
+          name: "Unsighted => drake hollow",
+          prixPlusBasMarcheNoir: 2.34,
+          prixPlusBas: 24.99,
+          prixHorsSoldes : 24.99,
+          statut: 'traded'
+        },
+        {
+          name: "Unsighted => Nadir",
+          prixPlusBasMarcheNoir:2.09,
+          prixPlusBas: 15.99,
+          prixHorsSoldes : 19.99,
+          statut: 'traded'
+        },
+        {
+          name: "Archvale",
+          prixPlusBasMarcheNoir: 4.31,
+          prixPlusBas: 10.56,
           prixHorsSoldes : 14.99,
           statut: 'trade'
         },
         {
-          name: "AUTONAUTS VS PIRATEBOTS",
-          prixPlusBas: 5.39,
-          prixPlusBasMarcheNoir: 2.14,
+          name: "Flynn Son of crimson",
+          prixPlusBasMarcheNoir: 13.64,
+          prixPlusBas: 1.36,
           prixHorsSoldes : 19.99,
           statut: 'trade'
         },
         {
-          name: "TINY TINA'S WONDERLANDS CHAOTIC GREAT EDITION",
-          prixPlusBas: 20,
-          prixPlusBasMarcheNoir: 20,
-          prixHorsSoldes : 79.99,
-          statut: 'keep'
-        },
-        {
-          name: "DECEIVE INC.",
-          prixPlusBas: 10.67,
-          prixPlusBasMarcheNoir: 8.49,
-          prixHorsSoldes : 20,
-          statut: 'keep'
-        },
-        {
-          name: "THE FORGOTTEN CITY",
-          prixPlusBas: 8.74,
-          prixPlusBasMarcheNoir: 10.61,
+          name: "The Wild At Heart",
+          prixPlusBasMarcheNoir: 4.00,
+          prixPlusBas: 18.39,
           prixHorsSoldes : 24.99,
           statut: 'keep'
         },
         {
-          name: "ACES & ADVENTURES",
-          prixPlusBas: 10.05,
-          prixPlusBasMarcheNoir: 6.52,
-          prixHorsSoldes : 19.50,
+          name: "Dodgeball Academia",
+          prixPlusBasMarcheNoir: 5.30,
+          prixPlusBas: 17.16,
+          prixHorsSoldes : 24.99,
           statut: 'keep'
         },
         {
-          name: "FORETALES",
-          prixPlusBas: 10.29,
-          prixPlusBasMarcheNoir: 12.31,
+          name: "Void Bastard",
+          prixPlusBasMarcheNoir: 3.14,
+          prixPlusBas: 23.58,
+          prixHorsSoldes : 29.99,
+          statut: 'keep'
+        },
+        {
+          name: "Ring of pain",
+          prixPlusBasMarcheNoir: 1.41,
+          prixPlusBas: 13.64,
           prixHorsSoldes : 19.99,
           statut: 'keep'
         },
         {
-          name: "WHO PRESSED MUTE ON UNCLE MARCUS",
-          prixPlusBas: 4.43,
-          prixPlusBasMarcheNoir: 6.20,
-          prixHorsSoldes : 14.79,
+          name: "ikenfell",
+          prixPlusBasMarcheNoir: 0.79,
+          prixPlusBas: 13.64,
+          prixHorsSoldes : 19.99,
+          statut: 'keep'
+        },
+        {
+          name: "Fae Tactics",
+          prixPlusBasMarcheNoir: 2.01,
+          prixPlusBas: 13.64,
+          prixHorsSoldes : 19.99,
           statut: 'keep'
         },
         // Ajoutez d'autres jeux avec leurs informations ici
       ],
-      prixTotalPaye: 9.99, // Prix total payé pour tous les jeux
-      lienBundle : 'https://www.humblebundle.com/membership/september-2023',
+      prixTotalPaye: 13.06, // Prix total payé pour tous les jeux
+      lienBundle : 'https://www.humblebundle.com/games/awesome-indies-from-humble-games',
       bundle : true,
-      nombrejeuxbundle : 5,
+      nombrejeuxbundle : 10,
       nombrejeuxvoulus : 5,
-      nombrejeuxachetables : 5,
-      },
-      {
-        groupName: "Wandering Sword",
-        games: [
-        {
-          name: "WANDERING SWORD",
-          bundle : false,
-          prixPlusBas: 21.54,
-          prixPlusBasMarcheNoir: 21.54,
-          prixHorsSoldes : 24.50
-        },
-        // Ajoutez d'autres jeux avec leurs informations ici
-      ],
-      prixTotalPaye: 21.54, // Prix total payé pour tous les jeux
-      lienBundle : 'https://store.steampowered.com/app/1876890/Wandering_Sword/',
-      nombrejeuxbundle : 1,
-      nombrejeuxvoulus : 1,
-      nombrejeuxachetables : 1,
+      nombrejeuxachetables : 3,
       },
     ]
     };
