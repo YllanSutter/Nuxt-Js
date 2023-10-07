@@ -70,27 +70,6 @@ export default {
           groupName: "Awesome Indies from Humble Games",
           games: [
         {
-          name: "Moonscars",
-          prixPlusBasMarcheNoir: 5.46,
-          prixPlusBas: 13.99,
-          prixHorsSoldes : 19.99,
-          statut: 'trade'
-        },
-        {
-          name: "Unsighted => drake hollow",
-          prixPlusBasMarcheNoir: 2.34,
-          prixPlusBas: 24.99,
-          prixHorsSoldes : 24.99,
-          statut: 'traded'
-        },
-        {
-          name: "Unsighted => Nadir",
-          prixPlusBasMarcheNoir:2.09,
-          prixPlusBas: 15.99,
-          prixHorsSoldes : 19.99,
-          statut: 'traded'
-        },
-        {
           name: "Archvale",
           prixPlusBasMarcheNoir: 4.31,
           prixPlusBas: 10.56,
@@ -99,8 +78,8 @@ export default {
         },
         {
           name: "Flynn Son of crimson",
-          prixPlusBasMarcheNoir: 13.64,
-          prixPlusBas: 1.36,
+          prixPlusBasMarcheNoir: 1.36,
+          prixPlusBas: 13.64,
           prixHorsSoldes : 19.99,
           statut: 'trade'
         },
@@ -145,6 +124,27 @@ export default {
           prixPlusBas: 13.64,
           prixHorsSoldes : 19.99,
           statut: 'keep'
+        },
+        {
+          name: "Unsighted => drake hollow",
+          prixPlusBasMarcheNoir: 2.34,
+          prixPlusBas: 24.99,
+          prixHorsSoldes : 24.99,
+          statut: 'traded'
+        },
+        {
+          name: "Unsighted => Nadir",
+          prixPlusBasMarcheNoir:2.09,
+          prixPlusBas: 15.99,
+          prixHorsSoldes : 19.99,
+          statut: 'traded'
+        },
+        {
+          name: "Moonscars => Dungeon / Dungeon!",
+          prixPlusBasMarcheNoir: 13.98,
+          prixPlusBas: 14.79,
+          prixHorsSoldes : 14.79,
+          statut: 'traded'
         },
         // Ajoutez d'autres jeux avec leurs informations ici
       ],

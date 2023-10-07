@@ -12,15 +12,15 @@
       <thead>
           <tr class="font-black">
             <th>Total Payé</th>
-            <th>Total Prix le plus bas</th>
             <th>Total Prix le plus bas (Marché Noir)</th>
+            <th>Total Prix le plus bas</th>
             <th>Total Prix hors soldes</th>
           </tr>
         </thead>
       <tr class="total-prix">
         <td> {{  round(totalPrixPaye) }} €</td>
-        <td> {{  round(totalprixPlusBas) }} €</td>
         <td> {{  round(totalPrixPlusBasMarcheNoir) }} €</td>
+        <td> {{  round(totalprixPlusBas) }} €</td>
         <td> {{  round(totalPrixHorsSoldes) }} €</td>
       </tr>
     </table>
@@ -100,8 +100,8 @@ export default {
         },
         {
           name: "THE FORGOTTEN CITY",
-          prixPlusBas: 8.74,
-          prixPlusBasMarcheNoir: 10.61,
+          prixPlusBas: 10.61,
+          prixPlusBasMarcheNoir: 8.74,
           prixHorsSoldes : 24.99,
           statut: 'keep'
         },
@@ -114,15 +114,15 @@ export default {
         },
         {
           name: "FORETALES",
-          prixPlusBas: 10.29,
-          prixPlusBasMarcheNoir: 12.31,
+          prixPlusBas: 12.31,
+          prixPlusBasMarcheNoir: 10.29,
           prixHorsSoldes : 19.99,
           statut: 'keep'
         },
         {
           name: "WHO PRESSED MUTE ON UNCLE MARCUS",
-          prixPlusBas: 4.43,
-          prixPlusBasMarcheNoir: 6.20,
+          prixPlusBas: 6.20,
+          prixPlusBasMarcheNoir: 4.43,
           prixHorsSoldes : 14.79,
           statut: 'keep'
         },

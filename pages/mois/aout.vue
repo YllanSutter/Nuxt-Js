@@ -14,15 +14,15 @@
       <thead>
           <tr class="font-black">
             <th>Total Payé</th>
-            <th>Total Prix le plus bas</th>
             <th>Total Prix le plus bas (Marché Noir)</th>
+            <th>Total Prix le plus bas</th>
             <th>Total Prix hors soldes</th>
           </tr>
         </thead>
       <tr class="total-prix">
         <td> {{  round(totalPrixPaye) }} €</td>
-        <td> {{  round(totalprixPlusBas) }} €</td>
         <td> {{  round(totalPrixPlusBasMarcheNoir) }} €</td>
+        <td> {{  round(totalprixPlusBas) }} €</td>
         <td> {{  round(totalPrixHorsSoldes) }} €</td>
       </tr>
     </table>
@@ -174,26 +174,18 @@ export default {
           statut: 'trade'
         },
         {
-          name: "Big Crown®: Showdown",
-          prixPlusBas: 2.59,
-          prixPlusBasMarcheNoir: 1.54,
-          prixHorsSoldes : 16.97,
-          statut: 'trade'
-        },
-        
-        {
-          name: "Little Orpheus",
-          prixPlusBas: 1.63,
-          prixPlusBasMarcheNoir: 0.97,
-          prixHorsSoldes : 10.36,
-          statut: 'trade'
-        },
-        {
           name: "Tango Fiesta",
           prixPlusBas: 8.29,
           prixPlusBasMarcheNoir: 0.93,
           prixHorsSoldes :9.99,
           statut: 'trade'
+        },
+        {
+          name: "Big Crown®: Showdown",
+          prixPlusBas: 2.59,
+          prixPlusBasMarcheNoir: 1.54,
+          prixHorsSoldes : 16.97,
+          statut: 'keep'
         },
         {
           name: "Attack of the Earthlings",
@@ -244,6 +236,13 @@ export default {
           prixHorsSoldes : 14.99,
           statut: 'traded'
         },
+        {
+          name: "Little Orpheus => Call of the sea",
+          prixPlusBas: 14.94,
+          prixPlusBasMarcheNoir: 1,
+          prixHorsSoldes : 19.99,
+          statut: 'traded'
+        },
         // Ajoutez d'autres jeux avec leurs informations ici
       ],
         prixTotalPaye: 7.99, // Prix total payé pour tous les jeux
@@ -252,6 +251,130 @@ export default {
         nombrejeuxvoulus : 3,
         bundle:true,
         nombrejeuxachetables : 1,
+      },
+      {//groupe 3
+        groupName: "If you build it",
+          games: [
+         {
+          name: "The tenants",
+          prixPlusBasMarcheNoir: 6.84,
+          prixPlusBas: 13.80,
+          prixHorsSoldes :  18.68,
+          statut: 'keep'
+        },
+        {
+          name: "Airborne Kingdom",
+          prixPlusBasMarcheNoir:3.23 ,
+          prixPlusBas: 8.39,
+          prixHorsSoldes : 24.50,
+          statut: 'keep'
+        },
+        {
+          name: "Pan'orama",
+          prixPlusBasMarcheNoir: 4.76,
+          prixPlusBas: 13.79,
+          prixHorsSoldes :  13.79,
+          statut: 'keep'
+        },
+        
+        {
+          name: "Evil Genius 2 => We happy few",
+          prixPlusBasMarcheNoir: 3.52,
+          prixPlusBas: 45.64,
+          prixHorsSoldes :  59.99,
+          statut: 'traded'
+        },
+        {
+          name: "Frozenheim => House flipper",
+          prixPlusBasMarcheNoir: 3.76,
+          prixPlusBas: 2.45,
+          prixHorsSoldes :  24.50,
+          statut: 'traded'
+        },
+        {
+          name: "Frozenheim => paradise killer",
+          prixPlusBasMarcheNoir: 1.58,
+          prixPlusBas: 8.81,
+          prixHorsSoldes :  19.50,
+          statut: 'traded'
+        },
+        // Ajoutez d'autres jeux avec leurs informations ici
+      ],
+        prixTotalPaye: 11.81, // Prix total payé pour tous les jeux
+        lienBundle : 'https://www.humblebundle.com/downloads?key=uMEVXCCvYnGZ8SyT',
+        nombrejeuxbundle : 5,
+        nombrejeuxvoulus : 3,
+        bundle:true,
+        nombrejeuxachetables : 3,
+      },
+      {//groupe 4
+        groupName: "Humble choice august 2023",
+          games: [
+         {
+          name: "Disco Elysium",
+          prixPlusBasMarcheNoir: 5.78,
+          prixPlusBas: 39.99,
+          prixHorsSoldes :  39.99,
+          statut: 'keep'
+        },
+        {
+          name: "Road 96",
+          prixPlusBasMarcheNoir: 1.86,
+          prixPlusBas: 6.98,
+          prixHorsSoldes : 19.96,
+          statut: 'keep'
+        },
+        {
+          name: "Arcade Paradise",
+          prixPlusBasMarcheNoir: 0.67,
+          prixPlusBas: 14.89,
+          prixHorsSoldes :  19.99,
+          statut: 'keep'
+        },
+        
+        {
+          name: "Such art : genius artist",
+          prixPlusBasMarcheNoir: 0.84,
+          prixPlusBas: 13.74,
+          prixHorsSoldes : 24.99,
+          statut: 'keep'
+        },
+        {
+          name: "Chivalry 2 => Farmer's dynasty",
+          prixPlusBasMarcheNoir: 2.92,
+          prixPlusBas: 29.99,
+          prixHorsSoldes :  29.99,
+          statut: 'traded'
+        },
+        {
+          name: "Tin can => Theseus protocol",
+          prixPlusBasMarcheNoir: 9.69,
+          prixPlusBas: 8.09,
+          prixHorsSoldes : 9.75,
+          statut: 'traded'
+        },
+        {
+          name: "Trek to yomi => Swag and sorcery",
+          prixPlusBasMarcheNoir: 0.56,
+          prixPlusBas: 8.44,
+          prixHorsSoldes :  12.79,
+          statut: 'traded'
+        },
+        {
+          name: "Trek to yomi => Nowhere prophet",
+          prixPlusBasMarcheNoir: 0.83,
+          prixPlusBas: 19.99,
+          prixHorsSoldes :  20.99,
+          statut: 'traded'
+        },
+        // Ajoutez d'autres jeux avec leurs informations ici
+      ],
+        prixTotalPaye: 9.99, // Prix total payé pour tous les jeux
+        lienBundle : 'https://www.humblebundle.com/downloads?key=uMEVXCCvYnGZ8SyT',
+        nombrejeuxbundle : 8,
+        nombrejeuxvoulus : 6,
+        bundle:true,
+        nombrejeuxachetables : 4,
       },
       ],
     };
