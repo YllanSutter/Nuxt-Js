@@ -66,7 +66,7 @@ export default {
   data() {
     return {
       gameGroups: [
-        {
+        {//group 1 : Humble Choice september 2023
           groupName: "Humble Choice - September 2023",
           games: [
             
@@ -135,7 +135,7 @@ export default {
       nombrejeuxvoulus : 5,
       nombrejeuxachetables : 5,
       },
-      {
+      {//group 2 : Wandering Sword
         groupName: "Wandering Sword",
         games: [
         {

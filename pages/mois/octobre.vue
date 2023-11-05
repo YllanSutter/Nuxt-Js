@@ -12,15 +12,15 @@
       <thead>
           <tr class="font-black">
             <th>Total Payé</th>
-            <th>Total Prix le plus bas</th>
             <th>Total Prix le plus bas (Marché Noir)</th>
+            <th>Total Prix le plus bas</th>
             <th>Total Prix hors soldes</th>
           </tr>
         </thead>
       <tr class="total-prix">
         <td> {{  round(totalPrixPaye) }} €</td>
-        <td> {{  round(totalprixPlusBas) }} €</td>
         <td> {{  round(totalPrixPlusBasMarcheNoir) }} €</td>
+        <td> {{  round(totalprixPlusBas) }} €</td>
         <td> {{  round(totalPrixHorsSoldes) }} €</td>
       </tr>
     </table>
@@ -66,23 +66,10 @@ export default {
   data() {
     return {
       gameGroups: [
-        {
+        {//group 1 : Awesome Indies from Humble Games
           groupName: "Awesome Indies from Humble Games",
           games: [
-        {
-          name: "Archvale",
-          prixPlusBasMarcheNoir: 4.31,
-          prixPlusBas: 10.56,
-          prixHorsSoldes : 14.99,
-          statut: 'trade'
-        },
-        {
-          name: "Flynn Son of crimson",
-          prixPlusBasMarcheNoir: 1.36,
-          prixPlusBas: 13.64,
-          prixHorsSoldes : 19.99,
-          statut: 'trade'
-        },
+       
         {
           name: "The Wild At Heart",
           prixPlusBasMarcheNoir: 4.00,
@@ -146,6 +133,27 @@ export default {
           prixHorsSoldes : 14.79,
           statut: 'traded'
         },
+        {
+          name: "Flynn Son of crimson => Quest of dungeons",
+          prixPlusBasMarcheNoir: 1.29,
+          prixPlusBas: 4.99,
+          prixHorsSoldes : 4.99,
+          statut: 'traded'
+        },
+        {
+          name: "Flynn Son of crimson => Where the water taste like wine",
+          prixPlusBasMarcheNoir: 0.64,
+          prixPlusBas: 14.69,
+          prixHorsSoldes : 19.99,
+          statut: 'traded'
+        },
+        {
+          name: "Archvale => 100 steps",
+          prixPlusBasMarcheNoir: 8.49,
+          prixPlusBas: 8.49,
+          prixHorsSoldes : 9.99,
+          statut: 'traded'
+        },
         // Ajoutez d'autres jeux avec leurs informations ici
       ],
       prixTotalPaye: 13.06, // Prix total payé pour tous les jeux
@@ -154,6 +162,77 @@ export default {
       nombrejeuxbundle : 10,
       nombrejeuxvoulus : 5,
       nombrejeuxachetables : 3,
+      }, 
+      {//group 2 : Platinum collection october 
+          groupName: "Platinum collection october",
+          games: [
+        {
+          name: "Tinykin",
+          prixPlusBasMarcheNoir:4.59,
+          prixPlusBas: 11.59,
+          prixHorsSoldes : 24.50,
+          statut: 'keep'
+        },
+        {
+          name: "Trailmakers",
+          prixPlusBasMarcheNoir: 3.91,
+          prixPlusBas: 6.00,
+          prixHorsSoldes : 24.99,
+          statut: 'keep'
+        },
+        {
+          name: "Wytchwood",
+          prixPlusBasMarcheNoir: 2.83,
+          prixPlusBas: 8.81,
+          prixHorsSoldes : 16.79,
+          statut: 'keep'
+        },
+        // Ajoutez d'autres jeux avec leurs informations ici
+      ],
+      prixTotalPaye: 9.99, // Prix total payé pour tous les jeux
+      lienBundle : 'https://www.fanatical.com/en/pick-and-mix/platinum-collection-build-your-own-bundle',
+      bundle : true,
+      nombrejeuxbundle : 3,
+      nombrejeuxvoulus : 3,
+      nombrejeuxachetables : 1,
+      },
+      
+      {//group 3 : For the king 2
+        groupName: "For the king 2",
+        games: [
+        {
+          name: "For the king 2",
+          bundle : false,
+          prixPlusBas: 19.23,
+          prixPlusBasMarcheNoir: 19.39,
+          prixHorsSoldes : 24.99
+        },
+        // Ajoutez d'autres jeux avec leurs informations ici
+      ],
+      prixTotalPaye: 22.49, // Prix total payé pour tous les jeux
+      lienBundle : 'https://store.steampowered.com/app/1676840/For_The_King_II/',
+      nombrejeuxbundle : 1,
+      nombrejeuxvoulus : 1,
+      nombrejeuxachetables : 1,
+      },
+      
+      {//group 4 : Slime 3K
+        groupName: "Slime 3K",
+        games: [
+        {
+          name: "Slime 3K",
+          bundle : false,
+          prixPlusBas: 3.57,
+          prixPlusBasMarcheNoir: 3.77,
+          prixHorsSoldes : 4.99
+        },
+        // Ajoutez d'autres jeux avec leurs informations ici
+      ],
+      prixTotalPaye: 3.49, // Prix total payé pour tous les jeux
+      lienBundle : 'https://store.steampowered.com/app/2348610/Slime_3K_Rise_Against_Despot/',
+      nombrejeuxbundle : 1,
+      nombrejeuxvoulus : 1,
+      nombrejeuxachetables : 1,
       },
     ]
     };

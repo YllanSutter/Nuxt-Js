@@ -3,7 +3,8 @@
         <NuxtLink class="tracking-wider uppercase font-semibold text-1xl border-r-2 pr-5" to="/">Accueil</NuxtLink>
         <NuxtLink class="tracking-wider uppercase font-semibold text-1xl border-r-2 pr-5" to="/about">A Propos</NuxtLink>
         <!-- <NuxtLink class="tracking-wider uppercase font-semibold text-1xl border-r-2 pr-5" to="/jeu">Jeu</NuxtLink> -->
-        <NuxtLink class="tracking-wider uppercase font-semibold text-1xl" to="/calculator">Calculator</NuxtLink>
+        <NuxtLink class="tracking-wider uppercase font-semibold text-1xl border-r-2 pr-5" to="/calculator">Calculator</NuxtLink>
+        <NuxtLink class="tracking-wider uppercase font-semibold text-1xl" to="/tableau">Tableau</NuxtLink>
     </div>
 </template>
 

@@ -92,17 +92,17 @@ export default {
           statut: 'traded'
         },
         {
+          name: "Panzer corps 2 => Spellcaster university",
+          prixPlusBas: 16.79,
+          prixPlusBasMarcheNoir: 2.10,
+          prixHorsSoldes : 20.99,
+          statut: 'traded'
+        },
+        {
           name: "Jupiter Hell => Before we leave",
           prixPlusBas: 3.43,
           prixPlusBasMarcheNoir: 1.59,
           prixHorsSoldes : 17.99,
-          statut: 'traded'
-        },
-        {
-          name: "Jack Move => Supraland",
-          prixPlusBas: 9.99,
-          prixPlusBasMarcheNoir: 1.63,
-          prixHorsSoldes : 19.99,
           statut: 'traded'
         },
         {
@@ -127,10 +127,10 @@ export default {
           statut: 'traded'
         },
         {
-          name: "Coromon => Alien fireteam elite",
-          prixPlusBas: 11.85,
-          prixPlusBasMarcheNoir: 4.13 ,
-          prixHorsSoldes : 29.99,
+          name: "Jack Move => Supraland",
+          prixPlusBas: 9.99,
+          prixPlusBasMarcheNoir: 1.63,
+          prixHorsSoldes : 19.99,
           statut: 'traded'
         },
         {
@@ -141,10 +141,24 @@ export default {
           statut: 'traded'
         },
         {
-          name: "Panzer corps 2 => Spellcaster university",
-          prixPlusBas: 16.79,
-          prixPlusBasMarcheNoir: 2.10,
-          prixHorsSoldes : 20.99,
+          name: "Coromon => Alien fireteam elite",
+          prixPlusBas: 11.85,
+          prixPlusBasMarcheNoir: 4.13 ,
+          prixHorsSoldes : 29.99,
+          statut: 'traded'
+        },
+        {
+          name: "The Dungeon of Naheulbeuk => Tohu",
+          prixPlusBas: 10.78,
+          prixPlusBasMarcheNoir: 0.75,
+          prixHorsSoldes : 12.99,
+          statut: 'traded'
+        },
+        {
+          name: "The Dungeon of Naheulbeuk => Tsioque",
+          prixPlusBas: 11.59,
+          prixPlusBasMarcheNoir: 1.08,
+          prixHorsSoldes : 11.59,
           statut: 'traded'
         },
         // Ajoutez d'autres jeux avec leurs informations ici
@@ -375,6 +389,24 @@ export default {
         nombrejeuxvoulus : 6,
         bundle:true,
         nombrejeuxachetables : 4,
+      },
+      {//group 5 : Wandering Sword
+        groupName: "Vampire Survivors: Tides of the Foscari",
+        games: [
+        {
+          name: "Vampire Survivors: Tides of the Foscari",
+          bundle : false,
+          prixPlusBasMarcheNoir: 2.37,
+          prixPlusBas: 1.59,
+          prixHorsSoldes : 1.99
+        },
+        // Ajoutez d'autres jeux avec leurs informations ici
+      ],
+      prixTotalPaye: 1.59, // Prix total payé pour tous les jeux
+      lienBundle : 'https://store.steampowered.com/app/2313550/Vampire_Survivors_Tides_of_the_Foscari/',
+      nombrejeuxbundle : 1,
+      nombrejeuxvoulus : 1,
+      nombrejeuxachetables : 1,
       },
       ],
     };
