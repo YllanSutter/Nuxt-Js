@@ -36,7 +36,7 @@
       </tfoot>
     </table>
 
-      <div class="noborder p-5 justify-center max-w-screen-2xl mx-auto p-5 text-white" v-for="(table, tableIndex) in filteredTables" :key="tableIndex">
+      <div class="noborder p-5 justify-center max-w-screen-2xl mx-auto p-5 text-white" v-for="(table, tableIndex) in filteredTables" :key="tableIndex" :id="table.id">
         <div class="w-full p-10 text-center">
           <textarea spellcheck="false" class="textCenter" v-model="table.tableText" @input="saveTableTextLocally(tableIndex)"></textarea>
           <textarea spellcheck="false" class="textCenter smallTextArea" v-model="table.tableText2" @input="saveTableTextLocally(tableIndex)"></textarea>
@@ -68,7 +68,8 @@
                   <option value="keep">Keep</option>
                 </select>
               </td>
-              <td @click="removeRow(tableIndex, rowIndex)" class="bg-red-500">Supprimer la ligne</td>
+              <!-- Supprimer une ligne (passer l'ID du tableau, ainsi que l'ID de la ligne) -->
+              <td @click="removeRow(table.id, rowIndex)" class="bg-red-500">Supprimer la ligne</td>
             </tr>
             <tr class="total bg-gray-900 w-full">
               <td>Total</td>
@@ -80,7 +81,9 @@
             </tr>
           </tbody>
           <tfoot>
-            <td class="absBundle nopad"><p @click="addRow(tableIndex)"  class="bg-green-500 p-5">Ajouter une ligne</p></td>
+            <td class="absBundle nopad">
+              <p @click="addRow(table.id)" class="bg-green-500 p-5">Ajouter une ligne</p>
+            </td>
             <td class="absBundle nopad inverse">
               <select v-model="table.mois" @change="saveDataLocally">
                 <option v-for="month in months" :key="month" :value="month">{{ month }}</option>
@@ -91,16 +94,21 @@
             </td>
           </tfoot>
         </table>
-        <div class="grid remove justify-center max-w-screen-2xl mx-auto text-red-500 "><p @click="confirmDeleteTable(tableIndex)" class="p-5 deleteTable">Supprimer le tableau</p></div>
-       
+        <div class="grid remove justify-center max-w-screen-2xl mx-auto text-red-500 ">
+          <p @click="confirmDeleteTable(table.id)" class="p-5 deleteTable">Supprimer le tableau</p>
+        </div>
       </div>
-      
+  
       <div class="space"></div>
-      <button @click="addTable" class="text-white button justify-center p-10 text-center w-full">Ajouter un tableau</button>
+      <button @click="addTable" class="text-white button justify-center p-10 text-center w-full">
+        Ajouter un tableau
+      </button>
     </div>
   </template>
   
   <script>
+
+
   import { saveData, loadData } from '~/data/dataHandler';
   
   export default {
@@ -110,6 +118,7 @@
         tables: [],
         tableText: '',
         tableText2: '',
+        lastTableId: 0,
         currentMonth: '',
         selectedYear: 'tous',
         selectedMonth: 'tous', // Ajoutez cette propriété pour le filtre par mois
@@ -155,44 +164,67 @@
         const selectedMonth = this.selectedMonth;
         const selectedYear = this.selectedYear;
         // Faites ce que vous voulez avec les valeurs sélectionnées
-        console.log('Mois sélectionné :', selectedMonth);
-        console.log('Année sélectionnée :', selectedYear);
+        // console.log('Mois sélectionné :', selectedMonth);
+        // console.log('Année sélectionnée :', selectedYear);
         this.$forceUpdate();
       },
-      addRow(tableIndex) {
-        if (!this.tables[tableIndex].items) {
-          this.tables[tableIndex].items = [];
+      addRow(tableId) {
+        const tableIndex = this.tables.findIndex(table => table.id === tableId);
+        if (tableIndex !== -1) {
+          const table = this.tables[tableIndex];
+          if (!table.items) {
+            table.items = [];
+          }
+          table.items.push({ name: '', prix: '', prixbasmarche: '', prixbas: '', prixHorsSoldes: '', tag: 'base' });
+          this.saveDataLocally();
         }
-        this.tables[tableIndex].items.push({ name: '', prix: '', prixbasmarche: '', prixbas: '', prixHorsSoldes: '', tag: 'base'}); // Initialisation à "keep"
-        this.saveDataLocally();
       },
-      removeRow(tableIndex, rowIndex) {
-        this.tables[tableIndex].items.splice(rowIndex, 1);
-        this.saveDataLocally();
-      },
-      addTable() {
-        this.tables.push({ 
-          mois: this.selectedMonth,  // Utilisez la valeur sélectionnée pour le mois
-          annee: this.selectedYear,  // Utilisez la valeur sélectionnée pour l'année
-          items: [
-            { name: '', prix: '', prixbasmarche: '', prixbas: '', prixHorsSoldes: '', tag: 'base' },
-          ],
-          tableText: 'Nom du Bundle / jeu', // Initialisez la propriété tableText à une chaîne vide
-          tableText2: 'Nombre de jeux initial : 0 / Nombre de jeux final : 0 / Nombres de jeux voulus : 0 / Nombres de jeux que j\'aurais pu acheter : 0'
-        });
-        this.saveDataLocally();
-      },
-      confirmDeleteTable(tableIndex) {
-        const confirmed = window.confirm("Voulez-vous vraiment supprimer ce tableau ?");
 
-        if (confirmed) {
-          this.removeTable(tableIndex);
+      removeRow(tableId, rowIndex) {
+        const tableIndex = this.tables.findIndex(table => table.id === tableId);
+        if (tableIndex !== -1) {
+          const table = this.tables[tableIndex];
+          table.items.splice(rowIndex, 1);
+          this.saveDataLocally();
         }
       },
-      removeTable(tableIndex) {
+    getLastTableId() {
+    const lastId = localStorage.getItem('lastTableId');
+    return lastId ? parseInt(lastId) : 0;
+  },
+    addTable() {
+      const lastId = this.getLastTableId();
+      const newTable = {
+        id: lastId + 1, // Incrémente le dernier ID
+        mois: this.selectedMonth,
+        annee: this.selectedYear,
+        items: [
+          { name: '', prix: '', prixbasmarche: '', prixbas: '', prixHorsSoldes: '', tag: 'base' },
+        ],
+        tableText: 'Nom du Bundle / jeu',
+        tableText2: 'Nombre de jeux initial : 0 / Nombre de jeux final : 0 / Nombres de jeux voulus : 0 / Nombres de jeux que j\'aurais pu acheter : 0',
+      };
+      this.tables.push(newTable);
+      this.saveDataLocally();
+
+      // Mettez à jour le dernier ID dans le stockage local
+      localStorage.setItem('lastTableId', newTable.id.toString());
+    },
+    confirmDeleteTable(tableIndex) {
+      //const tableId = this.tables[tableIndex].id; // Obtenez l'ID de la table
+      console.log(tableIndex);
+      const confirmed = window.confirm('Voulez-vous vraiment supprimer ce tableau ?');
+      if (confirmed) {
+        this.removeTable(tableIndex); // Appelez la méthode removeTable avec l'ID
+      }
+    },
+    removeTable(tableId) {
+      const tableIndex = this.tables.findIndex(table => table.id === tableId);
+      if (tableIndex !== -1) {
         this.tables.splice(tableIndex, 1);
         this.saveDataLocally();
-      },
+      }
+    },
       calculateTotal(table, column) {
         let total = 0;
         // Parcourez les éléments du tableau pour calculer le total en fonction de la colonne spécifiée
