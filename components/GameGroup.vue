@@ -21,10 +21,10 @@
             <td :class="game.statut+' statut'">
               {{ game.name }}
             </td>
-            <td>{{ round(prixPayeParJeu) }}<!--€--></td>
-            <td>{{ game.prixPlusBasMarcheNoir }} <!--€--></td> 
-            <td>{{ game.prixPlusBas }}<!--€--></td>
-            <td>{{ game.prixHorsSoldes }}<!--€--></td>
+            <td>{{ round(prixPayeParJeu) }}€</td>
+            <td>{{ game.prixPlusBasMarcheNoir }} €</td> 
+            <td>{{ game.prixPlusBas }}€</td>
+            <td>{{ game.prixHorsSoldes }}€</td>
             
            
           </tr>

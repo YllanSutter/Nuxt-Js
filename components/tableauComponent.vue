@@ -58,33 +58,34 @@
               <th>Prix le plus bas</th>
               <th>Prix Hors soldes</th>
               <th>Heures jouées</th>
-              <th>Tag</th>
-              <th>Actions</th>
+              <th class="text-center">Tag</th>
+              <th class="text-center">Actions</th>
             </tr>
           </thead>
-          <tbody>
-            <tr v-for="(item, rowIndex) in table.items" :key="rowIndex" >
-              <td class="statut nopad baseWidth" :class="item.tag" :style="{ width: item.name.length * 9 + 'px'}"><input class="w-full" v-model="item.name"  @input="saveDataLocally()" placeholder="Nom du jeu"/></td>
-              <td class="currency">{{ calculatePrixPaye(table.cout, table.items.length) }}</td>
-              <td class="nopad currency"><input class="w-full" v-model="item.prixbasmarche" @input="saveDataLocally()" placeholder="......" /></td>
-              <td class="nopad currency"><input class="w-full" v-model="item.prixbas" @input="saveDataLocally()" placeholder="......"/></td>
-              <td class="nopad currency"><input class="w-full" v-model="item.prixHorsSoldes" @input="saveDataLocally()" placeholder="......"/></td>
-              <td class="nopad heures"><input class="w-full" v-model="item.heuresJouees" @input="saveDataLocally(table.id)" placeholder="......"/></td>
-              <td class="text-center">
-                <select v-model="item.tag" @change="saveDataLocally">
-                  <option value="base">Base</option>
-                  <option value="trade">Trade</option>
-                  <option value="traded">Traded</option>
-                  <option value="platine">100%</option>
-                  <option value="keep">Keep</option>
-                </select>
-              </td>
-              <!-- Supprimer une ligne (passer l'ID du tableau, ainsi que l'ID de la ligne) -->
-              <td @click="removeRow(table.id, rowIndex)" class="bg-red-500 text-center">Supprimer la ligne</td>
-            </tr>
+          <!-- <tbody v-if="table.items.length > 0"> -->
+            <draggable v-if="table.items.length > 0" tag="tbody" v-model="table.items" :options="dragOptions" @end="handleDragEnd">
+              <tr v-for="(item, rowIndex) in table.items" :key="rowIndex" >
+                <td class="statut nopad baseWidth" :class="item.tag" :style="{ width: item.name.length * 9 + 'px'}"><input class="w-full" v-model="item.name"  @input="saveDataLocally(table.id)" placeholder="Nom du jeu"/></td>
+                <td class="currency">{{ calculatePrixPaye(table.cout, table.items.length) }}</td>
+                <td class="nopad currency"><input class="w-full" v-model="item.prixbasmarche" @input="saveDataLocally(table.id)" placeholder="......" /></td>
+                <td class="nopad currency"><input class="w-full" v-model="item.prixbas" @input="saveDataLocally(table.id)" placeholder="......"/></td>
+                <td class="nopad currency"><input class="w-full" v-model="item.prixHorsSoldes" @input="saveDataLocally(table.id)" placeholder="......"/></td>
+                <td class="nopad heures"><input class="w-full" v-model="item.heuresJouees" @input="saveDataLocally(table.id)" placeholder="......"/></td>
+                <td class="text-center">
+                  <select v-model="item.tag" @change="saveDataLocally">
+                    <option value="base">Base</option>
+                    <option value="trade">Trade</option>
+                    <option value="traded">Traded</option>
+                    <option value="platine">100%</option>
+                    <option value="keep">Keep</option>
+                  </select>
+                </td>
+                <!-- Supprimer une ligne (passer l'ID du tableau, ainsi que l'ID de la ligne) -->
+                <td @click="removeRow(table.id, rowIndex)" class="bg-red-500 text-center">Supprimer la ligne</td>
+              </tr>
             <tr class="total bg-gray-900 w-full">
               <td>Total</td>
-              <td class="nopad currency"><input class="w-full" v-model="table.cout" @input="saveDataLocally()" placeholder="Coût" /></td>
+              <td class="nopad currency"><input class="w-full" v-model="table.cout" @input="saveDataLocally(table.id)" placeholder="Coût" /></td>
               <td class="currency">{{ calculateTotal(table, 'prixbasmarche') }}</td>
               <td class="currency">{{ calculateTotal(table, 'prixbas') }}</td>
               <td class="currency">{{ calculateTotal(table, 'prixHorsSoldes') }}</td>
@@ -92,7 +93,9 @@
               <td class="maxSize">Nombre de jeux : {{table.items.length}}</td>
               <td class="maxSize lastmodified">Modifié le {{table.lastModified}}</td>
             </tr>
-          </tbody>
+            
+          </draggable>
+          <!-- </tbody> -->
           <tfoot>
             <td class="absBundle nopad">
               <p @click="addRow(table.id)" class="bg-green-500 p-5">Ajouter une ligne</p>
@@ -124,13 +127,18 @@
   
   <script>
 
-
+  import draggable from 'vuedraggable';
   import { saveData, loadData } from '~/data/dataHandler';
   
   export default {
-    
+    components: {
+      draggable, // Ajoutez le composant vuedraggable
+    },
     data() {
       return {
+        dragOptions: {
+          animation: 150, // Durée de l'animation de glissement en millisecondes
+        },
         tables: [],
         tableText: '',
         tableText2: '',
@@ -306,6 +314,19 @@
           total += table.items.length;
         }
         return total;
+      },
+      handleDragEnd(event) {
+        // L'ordre des éléments a été modifié, mettez à jour les données
+        // dans le tableau correspondant et sauvegardez les données localement.
+        this.tables.forEach((table) => {
+          if (table.items) {
+            table.items = table.items.map((item, index) => ({
+              ...item,
+              // Vous pouvez également mettre à jour d'autres propriétés si nécessaire
+            }));
+          }
+        });
+        this.saveDataLocally();
       },
     },
     mounted() {
