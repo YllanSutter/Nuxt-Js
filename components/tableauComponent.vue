@@ -2,6 +2,11 @@
     <div>
       <div class="noborder p-5 justify-center max-w-screen-2xl mx-auto p-5 text-white text-center">
         <!-- Filtre pour sélectionner les mois à afficher -->
+        <select v-model="selectedPlateforme" @change="filterTables">
+          <option value="tous">toutes les plateformes</option>
+          <option v-for="plateforme in plateformes" :key="plateforme" :value="plateforme">{{ plateforme }}</option>
+        </select>
+
         <select v-model="selectedMonth" @change="filterTables">
           <option value="tous">tous les mois</option>
           <option v-for="month in months" :key="month" :value="month">{{ month }}</option>
@@ -19,6 +24,8 @@
         <tr>
           <th>Totaux</th>
           <th>Prix payé</th>
+          <th>Nombre de jeux</th>
+          <th>Heures jouées</th>
           <th>Prix le plus bas (marché noir)</th>
           <th>Prix le plus bas</th>
           <th>Prix Hors soldes</th>
@@ -26,12 +33,13 @@
       </thead>
       <tfoot>
         <tr class="total bg-gray-900 w-full">
-          <th>Total général</th>
-          <th class="currency">{{ calculateGrandTotalPrixPaye() }}</th>
-          <th class="currency">{{ calculateGrandTotal('prixbasmarche') }}</th>
-          <th class="currency">{{ calculateGrandTotal('prixbas') }}</th>
-          <th class="currency">{{ calculateGrandTotal('prixHorsSoldes') }}</th>
-          <th colspan="2"></th>
+          <td>Total général</td>
+          <td class="currency">{{ calculateGrandTotalPrixPaye() }}</td>
+          <td class="nbjeux">{{ totalNumberOfGamesForVisibleTables() }}</td>
+          <td class="heures">{{ calculateGrandTotal('heuresJouees') }}</td>
+          <td class="currency">{{ calculateGrandTotal('prixbasmarche') }}</td>
+          <td class="currency">{{ calculateGrandTotal('prixbas') }}</td>
+          <td class="currency">{{ calculateGrandTotal('prixHorsSoldes') }}</td>
         </tr>
       </tfoot>
     </table>
@@ -49,35 +57,40 @@
               <th>Prix le plus bas (marché noir)</th>
               <th>Prix le plus bas</th>
               <th>Prix Hors soldes</th>
+              <th>Heures jouées</th>
               <th>Tag</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="(item, rowIndex) in table.items" :key="rowIndex" >
-              <td class="statut nopad baseWidth" :class="item.tag" :style="{ width: item.name.length * 7 + 'px'}"><input class="w-full" v-model="item.name"  @input="saveDataLocally" placeholder="Nom du jeu"/></td>
+              <td class="statut nopad baseWidth" :class="item.tag" :style="{ width: item.name.length * 9 + 'px'}"><input class="w-full" v-model="item.name"  @input="saveDataLocally()" placeholder="Nom du jeu"/></td>
               <td class="currency">{{ calculatePrixPaye(table.cout, table.items.length) }}</td>
-              <td class="nopad currency"><input class="w-full" v-model="item.prixbasmarche" @input="saveDataLocally" placeholder="......" /></td>
-              <td class="nopad currency"><input class="w-full" v-model="item.prixbas" @input="saveDataLocally" placeholder="......"/></td>
-              <td class="nopad currency"><input class="w-full" v-model="item.prixHorsSoldes" @input="saveDataLocally" placeholder="......"/></td>
-              <td>
+              <td class="nopad currency"><input class="w-full" v-model="item.prixbasmarche" @input="saveDataLocally()" placeholder="......" /></td>
+              <td class="nopad currency"><input class="w-full" v-model="item.prixbas" @input="saveDataLocally()" placeholder="......"/></td>
+              <td class="nopad currency"><input class="w-full" v-model="item.prixHorsSoldes" @input="saveDataLocally()" placeholder="......"/></td>
+              <td class="nopad heures"><input class="w-full" v-model="item.heuresJouees" @input="saveDataLocally(table.id)" placeholder="......"/></td>
+              <td class="text-center">
                 <select v-model="item.tag" @change="saveDataLocally">
                   <option value="base">Base</option>
                   <option value="trade">Trade</option>
                   <option value="traded">Traded</option>
+                  <option value="platine">100%</option>
                   <option value="keep">Keep</option>
                 </select>
               </td>
               <!-- Supprimer une ligne (passer l'ID du tableau, ainsi que l'ID de la ligne) -->
-              <td @click="removeRow(table.id, rowIndex)" class="bg-red-500">Supprimer la ligne</td>
+              <td @click="removeRow(table.id, rowIndex)" class="bg-red-500 text-center">Supprimer la ligne</td>
             </tr>
             <tr class="total bg-gray-900 w-full">
               <td>Total</td>
-              <td class="nopad currency"><input class="w-full" v-model="table.cout" @input="saveDataLocally" placeholder="Coût" /></td>
+              <td class="nopad currency"><input class="w-full" v-model="table.cout" @input="saveDataLocally()" placeholder="Coût" /></td>
               <td class="currency">{{ calculateTotal(table, 'prixbasmarche') }}</td>
               <td class="currency">{{ calculateTotal(table, 'prixbas') }}</td>
               <td class="currency">{{ calculateTotal(table, 'prixHorsSoldes') }}</td>
-              <td colspan="2"></td>
+              <td class="heures">{{ calculateTotal(table, 'heuresJouees') }}</td>
+              <td class="maxSize">Nombre de jeux : {{table.items.length}}</td>
+              <td class="maxSize lastmodified">Modifié le {{table.lastModified}}</td>
             </tr>
           </tbody>
           <tfoot>
@@ -85,10 +98,13 @@
               <p @click="addRow(table.id)" class="bg-green-500 p-5">Ajouter une ligne</p>
             </td>
             <td class="absBundle nopad inverse">
-              <select v-model="table.mois" @change="saveDataLocally">
+              <select v-model="table.plateforme" @change="saveDataLocally()">
+                <option v-for="plateforme in plateformes" :key="plateforme" :value="plateforme">{{ plateforme }}</option>
+              </select>
+              <select v-model="table.mois" @change="saveDataLocally()">
                 <option v-for="month in months" :key="month" :value="month">{{ month }}</option>
               </select>
-              <select v-model="table.annee" @change="saveDataLocally">
+              <select v-model="table.annee" @change="saveDataLocally()">
                 <option v-for="year in years" :key="year" :value="year">{{ year }}</option>
               </select>
             </td>
@@ -119,12 +135,17 @@
         tableText: '',
         tableText2: '',
         lastTableId: 0,
+        lastModified:'',
         currentMonth: '',
         selectedYear: 'tous',
         selectedMonth: 'tous', // Ajoutez cette propriété pour le filtre par mois
+        selectedPlateforme: 'tous', // Ajoutez cette propriété pour le filtre par mois
         months: [ // Ajoutez cette propriété
           "janvier", "février", "mars", "avril", "mai", "juin",
           "juillet", "aout", "septembre", "octobre", "novembre", "décembre"
+        ],
+        plateformes: [ // Ajoutez cette propriété
+          "Autres", "Steam", "Fanatical", "Humble"
         ],
         years: [
           2023,2024,2025
@@ -133,14 +154,15 @@
     },
     computed: {
     filteredTables() {
-        if (this.selectedMonth === 'tous' && this.selectedYear === 'tous') {
+        if (this.selectedMonth === 'tous' && this.selectedYear === 'tous' && this.selectedPlateforme === 'tous') {
           return this.tables;
         }
 
         return this.tables.filter(table => {
           const isMonthMatch = this.selectedMonth === 'tous' || table.mois === this.selectedMonth;
           const isYearMatch = this.selectedYear === 'tous' || table.annee === this.selectedYear;
-          return isMonthMatch && isYearMatch;
+          const isPlateformeMatch = this.selectedPlateforme === 'tous' || table.plateforme === this.selectedPlateforme;
+          return isMonthMatch && isYearMatch && isPlateformeMatch;
         });
       },
     },
@@ -150,7 +172,14 @@
       },
     },
     methods: {
-      saveDataLocally() {
+      saveDataLocally(tableId) {
+        //console.log(tableId);
+        this.tables.forEach((table) => {
+          const tableData = this.tables.find((t) => t.id === tableId); // Trouvez le tableau correspondant
+          if (tableData) {
+            tableData.lastModified = new Date().toLocaleString(); // Mettez à jour la date de modification
+          }
+        });
         saveData(this.tables);
       },
       saveTableTextLocally(tableIndex) {
@@ -158,11 +187,13 @@
         this.$set(this.tables[tableIndex], 'tableText', this.tables[tableIndex].tableText);
         this.$set(this.tables[tableIndex], 'tableText2', this.tables[tableIndex].tableText2);
         saveData(this.tables);
+        //console.log(this.tables[tableIndex]);
       },
       filterTables() {
         // Vous pouvez accéder au mois sélectionné et à l'année sélectionnée comme ceci :
         const selectedMonth = this.selectedMonth;
         const selectedYear = this.selectedYear;
+        const selectedPlateforme = this.selectedPlateforme;
         // Faites ce que vous voulez avec les valeurs sélectionnées
         // console.log('Mois sélectionné :', selectedMonth);
         // console.log('Année sélectionnée :', selectedYear);
@@ -198,11 +229,13 @@
         id: lastId + 1, // Incrémente le dernier ID
         mois: this.selectedMonth,
         annee: this.selectedYear,
+        plateforme: this.selectedPlateforme,
         items: [
           { name: '', prix: '', prixbasmarche: '', prixbas: '', prixHorsSoldes: '', tag: 'base' },
         ],
         tableText: 'Nom du Bundle / jeu',
-        tableText2: 'Nombre de jeux initial : 0 / Nombre de jeux final : 0 / Nombres de jeux voulus : 0 / Nombres de jeux que j\'aurais pu acheter : 0',
+        tableText2: 'Nombre de jeux initial : 0 / Nombres de jeux voulus : 0 / Nombres de jeux que j\'aurais pu acheter : 0', 
+        lastModified: new Date().toLocaleString(), // Ajoutez la date de création
       };
       this.tables.push(newTable);
       this.saveDataLocally();
@@ -267,6 +300,13 @@
 
         return grandTotalPrixPaye.toFixed(2);
       },
+      totalNumberOfGamesForVisibleTables() {
+        let total = 0;
+        for (const table of this.filteredTables) {
+          total += table.items.length;
+        }
+        return total;
+      },
     },
     mounted() {
       this.tables = loadData();
@@ -284,6 +324,10 @@
       const currentYear = currentDate.getFullYear();
       this.years = [currentYear - 1, currentYear, currentYear + 1]; // Vous pouvez personnaliser cette liste
       this.selectedYear = currentYear; // Initialiser selectedYear avec "toutes" pour afficher toutes les années
+
+      //Obtenir la plateforme actuelle
+      const plateformes = ["Autres", "Steam", "Fanatical", "Humble"];
+      this.selectedPlateforme = "tous";
     },
   };
   </script>

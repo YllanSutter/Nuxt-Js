@@ -61,7 +61,15 @@
     {
         position: relative;
     }
-    th.currency
+    th:not(:first-child), td.currency,td.heures
+    {
+        max-width: 100px;
+    }
+    .maxSize
+    {
+        max-width: 170px;
+    }
+    th.currency,th.heures
     {
         padding-right: 20px;
     }
@@ -74,7 +82,7 @@
         padding: 20px;
         text-align: right;
     }
-    .currency::after
+    .currency::after,.heures::after,.nbjeux::after
     {
         content: "€";
         position: absolute;
@@ -84,6 +92,15 @@
         height: 100%;
         display: grid;
         align-items: center;
+    }
+    .heures::after
+    {
+        content: "h";
+    }
+    .nbjeux::after
+    {
+        content: "jeux";
+        right: 14Px;
     }
     tr:last-child>td
     {
@@ -97,7 +114,7 @@
     {
         border-right: none;
     }
-    td:not(:first-child),th:not(:first-child)
+    td:not(:first-child,.text-center),th:not(:first-child,.text-center)
     {
         text-align: right;
     }
@@ -247,6 +264,14 @@
     .traded
     {
         border-bottom:  1Px solid #3c4b56;
+    }
+    .platine
+    {
+        border-bottom:  1Px solid #af8303;
+    }
+    .platine::before
+    {
+        background: #463400;
     }
     .traded::before,.traded .statut::before
     {
