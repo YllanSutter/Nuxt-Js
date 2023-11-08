@@ -1,4 +1,7 @@
 export default {
+  serverMiddleware: [
+    { path: '/api/data', handler: '~/api/data.js' },
+  ],
   // Target: https://go.nuxtjs.dev/config-target
   target: 'static',
 

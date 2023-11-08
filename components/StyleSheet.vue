@@ -104,7 +104,7 @@
     .nbjeux::after
     {
         content: "jeux";
-        right: 14Px;
+        right: 10Px;
     }
     tr:last-child>td
     {

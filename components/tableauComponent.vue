@@ -71,18 +71,18 @@
                 <td class="draghandle"></td>
                 <td spellcheck="false" class="statut nopad baseWidth" :class="item.tag" :style="{ width: item.name.length * 9 + 'px'}">
                   <input
-  class="w-full"
-  v-model="item.name"
-  @input="saveDataLocally(table.id)"
-  placeholder="Nom du jeu"
-  :class="{ 'highlight': shouldHighlight(item.name, false) }"
-/>
+                    class="w-full"
+                    v-model="item.name"
+                    @input="saveDataLocally(table.id)"
+                    placeholder="Nom du jeu"
+                    :class="{ 'highlight': shouldHighlight(item.name, false) }"
+                  />
                 </td>
-                                <td class="currency">{{ calculatePrixPaye(table.cout, table.items.length) }}</td>
-                <td class="nopad currency"><input class="w-full" v-model="item.prixbasmarche" @input="saveDataLocally(table.id)" placeholder="......" /></td>
-                <td class="nopad currency"><input class="w-full" v-model="item.prixbas" @input="saveDataLocally(table.id)" placeholder="......"/></td>
-                <td class="nopad currency"><input class="w-full" v-model="item.prixHorsSoldes" @input="saveDataLocally(table.id)" placeholder="......"/></td>
-                <td class="nopad heures"><input class="w-full" v-model="item.heuresJouees" @input="saveDataLocally(table.id)" placeholder="......"/></td>
+                <td class="currency">{{ calculatePrixPaye(table.cout, table.items.length) }}</td>
+                <td class="nopad currency"><input class="w-full" v-model="item.prixbasmarche" @input="fixDecimalSeparator(table.id, rowIndex, 'prixbasmarche')" placeholder="......" /></td>
+                <td class="nopad currency"><input class="w-full" v-model="item.prixbas" @input="fixDecimalSeparator(table.id, rowIndex, 'prixbas')" placeholder="......"/></td>
+                <td class="nopad currency"><input class="w-full" v-model="item.prixHorsSoldes"  @input="fixDecimalSeparator(table.id, rowIndex, 'prixHorsSoldes')" placeholder="......"/></td>
+                <td class="nopad heures"><input class="w-full" v-model="item.heuresJouees"  @input="fixDecimalSeparator(table.id, rowIndex, 'heuresJouees')" placeholder="......"/></td>
                 <td class="text-center">
                   <select v-model="item.tag" @change="saveDataLocally">
                     <option value="base">Base</option>
@@ -228,6 +228,25 @@
         // console.log('Mois sélectionné :', selectedMonth);
         // console.log('Année sélectionnée :', selectedYear);
         this.$forceUpdate();
+      },
+      fixDecimalSeparator(tableId, rowIndex, columnName) {
+        // Récupérez la valeur actuelle
+        const tableIndex = this.tables.findIndex(table => table.id === tableId);
+        if (tableIndex !== -1) {
+          const table = this.tables[tableIndex];
+          if (table.items && table.items[rowIndex]) {
+            const value = table.items[rowIndex][columnName];
+            
+            // Remplacez les virgules par des points
+            const fixedValue = value.replace(',', '.');
+
+            // Mettez à jour la valeur dans le tableau
+            this.$set(table.items[rowIndex], columnName, fixedValue);
+
+            // Sauvegardez les données localement
+            this.saveDataLocally(tableId);
+          }
+        }
       },
       addRow(tableId) {
         const tableIndex = this.tables.findIndex(table => table.id === tableId);
