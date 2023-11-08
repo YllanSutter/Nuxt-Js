@@ -46,6 +46,10 @@
         color: #fff;
         font-family: 'Dosis', sans-serif;
     }
+    table.hideElements tbody tr:not(:first-child,:last-child)
+    {
+        display: none;
+    }
     td
     {
         padding: 15px 20px;
@@ -114,7 +118,7 @@
     {
         border-right: none;
     }
-    td:not(:first-child,.text-center),th:not(:first-child,.text-center)
+    td:not(:first-child,.text-center,.text-left),th:not(:first-child,.text-center,.text-left)
     {
         text-align: right;
     }
@@ -132,6 +136,29 @@
         letter-spacing: 2Px;
         font-size: 10Px;
         padding: 10px;
+    }
+    .draghandle
+    {
+        position: relative;
+    }
+    .draghandle::before
+    {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url(../assets/move.svg);
+        background-size: 30px;
+        background-repeat: no-repeat;
+        background-position: center;
+        opacity: 0.1;
+        transition: all 0.4s;
+    }
+    .draghandle:hover::before
+    {
+        opacity: 0.3;
     }
     tfoot
     {
@@ -232,7 +259,12 @@
         filter: brightness(0.095);
         z-index: -1;
     }
-    /* ----------- */
+    /* ----RECHERCHE ---- */
+    .inputGap
+    {
+        padding: 0 20px;
+    }
+    /* ----STATUT ET COULEUR ---- */
     .statut
     {
         position: relative;
@@ -253,37 +285,45 @@
     {
         opacity: 0.6;
     } 
-    .keep
+    .keep,.green
     {
-        border-bottom: 1Px solid #2f666a;
+        border-bottom: 1Px solid #2f666a!important;
     }
-    .trade
+    .orange
     {
-        border-bottom: 1Px solid #6f4949;
+        border-bottom: 1Px solid orange!important;
+    }
+    .trade,.red
+    {
+        border-bottom: 1Px solid #6f4949!important;
     }
     .traded
     {
-        border-bottom:  1Px solid #3c4b56;
+        border-bottom:  1Px solid #3c4b56!important;
     }
     .platine
     {
-        border-bottom:  1Px solid #af8303;
+        border-bottom:  1Px solid #af8303!important;
     }
     .platine::before
     {
-        background: #463400;
+        background: #463400!important;
     }
     .traded::before,.traded .statut::before
     {
-        background: #010f1e;
+        background: #010f1e!important;
     }
    .trade::before,.trade .statut::before
     {
-        background: #700f0f;
+        background: #700f0f!important;
     }
     .keep::before,.keep .statut::before
     {
         background: #214c4c;
+    }
+    .highlight
+    {
+        border-left:3px solid #af8303;
     }
 
 </style>
