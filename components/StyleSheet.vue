@@ -39,7 +39,7 @@
         position: relative;
         z-index: 1;
         background: rgba(255, 255, 255, 0.25);
-        border-radius: 16px;
+        border-radius: 16px 16px 0 0;
         box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
         backdrop-filter: blur(5px);
         -webkit-backdrop-filter: blur(5px);
@@ -100,6 +100,10 @@
     .heures::after
     {
         content: "h";
+    }
+    .nbjeux
+    {
+        text-align: center!important;
     }
     .nbjeux::after
     {
@@ -183,7 +187,7 @@
         font-size: 1em;
         height: 25px!important;
     }
-    tfoot td:not(:first-child)
+    tfoot td:not(:first-child,.ratio)
     {
         text-align: center;
     }
@@ -285,17 +289,21 @@
     {
         opacity: 0.6;
     } 
-    .keep,.green
+    .keep
     {
         border-bottom: 1Px solid #2f666a!important;
     }
-    .orange
+    .green
+    {
+        border-bottom: 1Px solid #1e8847!important;
+    }
+     .orange
     {
         border-bottom: 1Px solid orange!important;
     }
     .trade,.red
     {
-        border-bottom: 1Px solid #6f4949!important;
+        border-bottom: 1Px solid #f00!important;
     }
     .traded
     {

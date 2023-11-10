@@ -33,7 +33,7 @@
           <th>Prix Hors soldes</th>
         </tr>
       </thead>
-      <tfoot>
+      <tbody>
         <tr class="total bg-gray-900 w-full">
           <td>Total général</td>
           <td class="currency"  :class="(calculateGrandTotalPrixPaye() > 0 && calculateGrandTotalPrixPaye() <= 25 ? 'green ' : '') + (calculateGrandTotalPrixPaye() > 25 && calculateGrandTotalPrixPaye() < 50 ? 'orange' : '') + (calculateGrandTotalPrixPaye() >= 50 ? 'red' : '')">{{ calculateGrandTotalPrixPaye() }}</td>
@@ -43,6 +43,15 @@
           <td class="currency">{{ calculateGrandTotal('prixbas') }}</td>
           <td class="currency">{{ calculateGrandTotal('prixHorsSoldes') }}</td>
         </tr>
+      </tbody>
+      <tfoot>
+        <td>Ratio</td>
+        <td></td>
+        <td class="ratio" :class="(ratio(calculateGrandTotalPrixPaye(),totalNumberOfGamesForVisibleTables()) > 0 && ratio(calculateGrandTotalPrixPaye(),totalNumberOfGamesForVisibleTables()) <= 0.5 ? 'green ' : '') + (ratio(calculateGrandTotalPrixPaye(),totalNumberOfGamesForVisibleTables()) > 0.5 && ratio(calculateGrandTotalPrixPaye(),totalNumberOfGamesForVisibleTables()) < 1 ? 'orange' : '') + (ratio(calculateGrandTotalPrixPaye(),totalNumberOfGamesForVisibleTables()) >= 1 ? 'red' : '')">{{ ratio(calculateGrandTotalPrixPaye(),totalNumberOfGamesForVisibleTables()) }}€/jeu</td>
+        <td class="ratio" :class="(ratio(calculateGrandTotalPrixPaye(),calculateGrandTotal('heuresJouees')) > 0 && ratio(calculateGrandTotalPrixPaye(),calculateGrandTotal('heuresJouees')) <= 1 ? 'green ' : '') + (ratio(calculateGrandTotalPrixPaye(),calculateGrandTotal('heuresJouees')) > 1 && ratio(calculateGrandTotalPrixPaye(),calculateGrandTotal('heuresJouees')) < 2 ? 'orange' : '') + (ratio(calculateGrandTotalPrixPaye(),calculateGrandTotal('heuresJouees')) >= 2 ? 'red' : '')">{{ ratio(calculateGrandTotalPrixPaye(),calculateGrandTotal('heuresJouees')) }}€/h</td>
+        <td class="ratio" :class="(ratio(calculateGrandTotal('prixbasmarche'),calculateGrandTotalPrixPaye()) > 0 && ratio(calculateGrandTotal('prixbasmarche'),calculateGrandTotalPrixPaye()) <= 2 ? 'red ' : '') + (ratio(calculateGrandTotal('prixbasmarche'),calculateGrandTotalPrixPaye()) > 2 && ratio(calculateGrandTotal('prixbasmarche'),calculateGrandTotalPrixPaye()) < 5 ? 'orange' : '') + (ratio(calculateGrandTotal('prixbasmarche'),calculateGrandTotalPrixPaye()) >= 5 ? 'green' : '')">Cout * {{ ratio(calculateGrandTotal('prixbasmarche'),calculateGrandTotalPrixPaye()) }}</td>
+        <td class="ratio" :class="(ratio(calculateGrandTotal('prixbas'),calculateGrandTotalPrixPaye()) > 0 && ratio(calculateGrandTotal('prixbas'),calculateGrandTotalPrixPaye()) <= 2 ? 'red ' : '') + (ratio(calculateGrandTotal('prixbas'),calculateGrandTotalPrixPaye()) > 2 && ratio(calculateGrandTotal('prixbas'),calculateGrandTotalPrixPaye()) < 5 ? 'orange' : '') + (ratio(calculateGrandTotal('prixbas'),calculateGrandTotalPrixPaye()) >= 5 ? 'green' : '')">Cout * {{ ratio(calculateGrandTotal('prixbas'),calculateGrandTotalPrixPaye()) }}</td>
+        <td class="ratio" :class="(ratio(calculateGrandTotal('prixHorsSoldes'),calculateGrandTotalPrixPaye()) > 0 && ratio(calculateGrandTotal('prixHorsSoldes'),calculateGrandTotalPrixPaye()) <= 2 ? 'red ' : '') + (ratio(calculateGrandTotal('prixHorsSoldes'),calculateGrandTotalPrixPaye()) > 2 && ratio(calculateGrandTotal('prixHorsSoldes'),calculateGrandTotalPrixPaye()) < 5 ? 'orange' : '') + (ratio(calculateGrandTotal('prixHorsSoldes'),calculateGrandTotalPrixPaye()) >= 5 ? 'green' : '')">Cout * {{ ratio(calculateGrandTotal('prixHorsSoldes'),calculateGrandTotalPrixPaye()) }}</td>
       </tfoot>
     </table>
 
@@ -278,6 +287,7 @@
           mois: this.selectedMonth,
           annee: this.selectedYear,
           plateforme: this.selectedPlateforme,
+         hideElementsVisible: true,
           items: [
             { name: '', prix: '', prixbasmarche: '', prixbas: '', prixHorsSoldes: '', tag: 'base' },
           ],
@@ -293,7 +303,7 @@
       },
       confirmDeleteTable(tableIndex) {
         //const tableId = this.tables[tableIndex].id; // Obtenez l'ID de la table
-        console.log(tableIndex);
+        //console.log(tableIndex);
         const confirmed = window.confirm('Voulez-vous vraiment supprimer ce tableau ?');
         if (confirmed) {
           this.removeTable(tableIndex); // Appelez la méthode removeTable avec l'ID
@@ -346,6 +356,13 @@
           }
         }
         return grandTotalPrixPaye.toFixed(2);
+      },
+      ratio(column1, column2, column3) {
+        let result = parseFloat(column1 / column2);
+        if (!isNaN(result) && !isNaN(column3)) {
+          result /= parseFloat(column3);
+        }
+        return isNaN(result) ? 0 : result.toFixed(2);
       },
       totalNumberOfGamesForVisibleTables() {
         let total = 0;
