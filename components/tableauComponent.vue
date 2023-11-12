@@ -39,12 +39,27 @@
         <option v-for="year in years" :key="year" :value="year">{{ year }}</option>
       </select>
       <input class="inputGap" v-model="searchText" @input="filterTables" placeholder="Rechercher..." />
-      <div class="checkbox-wrapper"><input type="checkbox" id="cbx-1" class="inp-cbx" v-model="columnVisibility.showPrixPaye" @click="toggleColumn('showPrixPaye')" style="display:none"/><label class="cbx" for="cbx-1"><span class="checkbox-custom"><svg width="12px" height="9px" viewBox="0 0 12 9"><polyline points="1 5 4 8 11 1"></polyline></svg></span><span class="label-text">Afficher Prix payé</span></label></div>
-      <div class="checkbox-wrapper"><input type="checkbox" id="cbx-2" class="inp-cbx" v-model="columnVisibility.showPrixBasMarche" @click="toggleColumn('showPrixBasMarche')" style="display:none"/><label class="cbx" for="cbx-2"><span class="checkbox-custom"><svg width="12px" height="9px" viewBox="0 0 12 9"><polyline points="1 5 4 8 11 1"></polyline></svg></span><span class="label-text">Afficher Prix marché noir</span></label></div>
-      <div class="checkbox-wrapper"><input type="checkbox" id="cbx-3" class="inp-cbx" v-model="columnVisibility.showPrixBas" @click="toggleColumn('showPrixBas')" style="display:none"/><label class="cbx" for="cbx-3"><span class="checkbox-custom"><svg width="12px" height="9px" viewBox="0 0 12 9"><polyline points="1 5 4 8 11 1"></polyline></svg></span><span class="label-text">Afficher Prix le plus bas</span></label></div>
-      <div class="checkbox-wrapper"><input type="checkbox" id="cbx-4" class="inp-cbx" v-model="columnVisibility.showPrixHorsSoldes" @click="toggleColumn('showPrixHorsSoldes')" style="display:none"/><label class="cbx" for="cbx-4"><span class="checkbox-custom"><svg width="12px" height="9px" viewBox="0 0 12 9"><polyline points="1 5 4 8 11 1"></polyline></svg></span><span class="label-text">Afficher Prix hors soldes</span></label></div>
-      <div class="checkbox-wrapper"><input type="checkbox" id="cbx-5" class="inp-cbx" v-model="columnVisibility.showHeuresJouees" @click="toggleColumn('showHeuresJouees')" style="display:none"/><label class="cbx" for="cbx-5"><span class="checkbox-custom"><svg width="12px" height="9px" viewBox="0 0 12 9"><polyline points="1 5 4 8 11 1"></polyline></svg></span><span class="label-text">Afficher heures jouées</span></label></div>
-      <div class="checkbox-wrapper"><input type="checkbox" id="cbx-6" class="inp-cbx" v-model="columnVisibility.showTag" @click="toggleColumn('showTag')" style="display:none"/><label class="cbx" for="cbx-6"><span class="checkbox-custom"><svg width="12px" height="9px" viewBox="0 0 12 9"><polyline points="1 5 4 8 11 1"></polyline></svg></span><span class="label-text">Afficher Tag</span></label></div>
+      <div v-for="column in columnsCreate" :key="column[0]">
+        <div class="checkbox-wrapper">
+          <input
+            type="checkbox"
+            :id="'cbx-' + column[0]"
+            class="inp-cbx"
+            v-model="columnVisibility[column[0]]"
+            @click="toggleColumn(column[0])"
+            style="display:none"
+          />
+          <label :for="'cbx-' + column[0]" class="cbx">
+            <span class="checkbox-custom">
+              <svg width="12px" height="9px" viewBox="0 0 12 9">
+                <polyline points="1 5 4 8 11 1"></polyline>
+              </svg>
+            </span>
+            <span class="label-text">{{ column[1] }}</span>
+          </label>
+        </div>
+      </div>
+      <div class="checkbox-wrapper"><input type="checkbox" id="tab-cbx-1" class="inp-cbx" v-model="columnVisibility.hideAllElements" @click="hideAllElements()" style="display:none"/><label class="cbx" for="tab-cbx-1"><span class="checkbox-custom"><svg width="12px" height="9px" viewBox="0 0 12 9"><polyline points="1 5 4 8 11 1"></polyline></svg></span><span class="label-text">Réduire les tableaux</span></label></div>
     </div>
   </div>
 
@@ -101,7 +116,7 @@
               <th v-if="columnVisibility.showPrixHorsSoldes">Prix Hors soldes</th>
               <th v-if="columnVisibility.showHeuresJouees">Heures jouées</th>
               <th v-if="columnVisibility.showTag" class="text-center">Tag</th>
-              <th class="hideChild"  @click="toggleHideElements(table.id)" v-if="table.items.length > 1">{{ !table.hideElementsVisible ? 'Voir +' : 'Voir -' }}</th>
+              <th v-if="columnVisibility.showActions && table.items.length > 1" class="hideChild"  @click="toggleHideElements(table.id)">{{ !table.hideElementsVisible ? 'Voir +' : 'Voir -' }}</th>
             </tr>
           </thead>
           <!-- <tbody v-if="table.items.length > 0"> -->
@@ -132,18 +147,18 @@
                   </select>
                 </td>
                 <!-- Supprimer une ligne (passer l'ID du tableau, ainsi que l'ID de la ligne) -->
-                <td @click="removeRow(table.id, rowIndex)" class="bg-red-500 text-center">Supprimer la ligne</td>
+                <td v-if="columnVisibility.showActions" @click="removeRow(table.id, rowIndex)" class="bg-red-500 text-center">Supprimer la ligne</td>
               </tr>
             <tr class="total bg-gray-900 w-full">
               <td></td>
-              <td>Total</td>
+              <td>Total : Nombre de jeux : {{table.items.length}}</td>
               <td v-if="columnVisibility.showPrixPaye" class="nopad currency"><input class="w-full" v-model="table.cout" @input="saveDataLocally(table.id)" placeholder="Coût" /></td>
               <td v-if="columnVisibility.showPrixBasMarche" class="currency">{{ calculateTotal(table, 'prixbasmarche') }}</td>
               <td v-if="columnVisibility.showPrixBas" class="currency">{{ calculateTotal(table, 'prixbas') }}</td>
               <td v-if="columnVisibility.showPrixHorsSoldes" class="currency">{{ calculateTotal(table, 'prixHorsSoldes') }}</td>
               <td v-if="columnVisibility.showHeuresJouees" class="heures">{{ calculateTotal(table, 'heuresJouees') }}</td>
-              <td v-if="columnVisibility.showTag" class="maxSize">Nombre de jeux : {{table.items.length}}</td>
-              <td class="maxSize lastmodified">Modifié le {{table.lastModified}}</td>
+              <td v-if="columnVisibility.showTag" class="maxSize"></td>
+              <td v-if="columnVisibility.showActions" class="maxSize lastmodified">Modifié le {{table.lastModified}}</td>
             </tr>
             
           </draggable>
@@ -219,8 +234,19 @@
           showPrixHorsSoldes:true,
           showHeuresJouees:true,
           showTag:false,
+          showActions:false,
         },
+        columnsCreate : [
+          ['showPrixPaye', 'Afficher Prix payé'],
+          ['showPrixBasMarche', 'Afficher Prix marché'],
+          ['showPrixBas', 'Afficher Prix bas'],
+          ['showPrixHorsSoldes', 'Afficher Prix hors soldes'],
+          ['showHeuresJouees', 'Afficher Heures jouées'],
+          ['showTag', 'Afficher Tag']
+        ],
+        columnCreateVisibility: this.generateColumnVisibilityObject(['showPrixPaye', 'showPrixBasMarche', 'showPrixBas', 'showPrixHorsSoldes', 'showHeuresJouees', 'showTag']),
         isWrapChoixVisible: false,
+        showElementsVisibleAll: true,
         
       };
     },
@@ -428,13 +454,22 @@
         
         const tableIndexHide = this.tables.findIndex(table => table.id === tableId);
         if (tableIndexHide !== -1) {
-          //console.log(this.tables[tableIndexHide].id);
          this.tables[tableIndexHide].hideElementsVisible = !this.tables[tableIndexHide].hideElementsVisible;
-          //console.log(this.tables[tableIndexHide].hideElementsVisible);
         }
         
         this.saveDataLocally();
       },
+      hideAllElements() {
+      // Inversez la valeur de showElementsVisibleAll
+      this.showElementsVisibleAll = !this.showElementsVisibleAll;
+
+      // Appliquez la même valeur à hideElementsVisible pour chaque table
+      this.tables.forEach(table => {
+        table.hideElementsVisible = this.showElementsVisibleAll;
+      });
+
+      this.saveDataLocally();
+    },
       shouldHighlight(itemName, isTableText) {
         if (isTableText) {
           return false; // Ne mettez pas en surbrillance dans le textarea
@@ -460,6 +495,13 @@
       },
       toggleWrapChoix() {
         this.isWrapChoixVisible = !this.isWrapChoixVisible;
+      },
+      generateColumnVisibilityObject(columns) {
+        const visibilityObject = {};
+        columns.forEach(column => {
+          visibilityObject[column] = true; // ou false si vous voulez initialiser à false
+        });
+        return visibilityObject;
       },
     },
     mounted() {
