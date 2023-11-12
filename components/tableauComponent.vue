@@ -1,57 +1,87 @@
 <template>
     <div>
       <div class="noborder p-5 justify-center max-w-screen-2xl mx-auto p-5 text-white text-center">
-        <!-- Filtre pour sélectionner les mois à afficher -->
-        <select v-model="selectedPlateforme" @change="filterTables">
-          <option value="tous">toutes les plateformes</option>
-          <option v-for="plateforme in plateformes" :key="plateforme" :value="plateforme">{{ plateforme }}</option>
-        </select>
+          <!-- Filtre pour sélectionner les mois à afficher -->
+          <select v-model="selectedPlateforme" @change="filterTables">
+            <option value="tous">toutes les plateformes</option>
+            <option v-for="plateforme in plateformes" :key="plateforme" :value="plateforme">{{ plateforme }}</option>
+          </select>
 
-        <select v-model="selectedMonth" @change="filterTables">
-          <option value="tous">tous les mois</option>
-          <option v-for="month in months" :key="month" :value="month">{{ month }}</option>
-        </select>
+          <select v-model="selectedMonth" @change="filterTables">
+            <option value="tous">tous les mois</option>
+            <option v-for="month in months" :key="month" :value="month">{{ month }}</option>
+          </select>
 
-        <select v-model="selectedYear" @change="filterTables">
-          <option value="tous">toutes les années</option>
-          <option v-for="year in years" :key="year" :value="year">{{ year }}</option>
-        </select>
-        <input class="inputGap" v-model="searchText" @input="filterTables" placeholder="Rechercher..." />
+          <select v-model="selectedYear" @change="filterTables">
+            <option value="tous">toutes les années</option>
+            <option v-for="year in years" :key="year" :value="year">{{ year }}</option>
+          </select>
+          <input class="inputGap" v-model="searchText" @input="filterTables" placeholder="Rechercher..." />
+  </div>
+  <div class="posfix checkboxTableauCalculator  text-white ">
+    <div class="absBundle nopad affichageWrapChoix" @click="toggleWrapChoix">
+      <p class="bg-green-500 p-5">Plus d'options</p>
+    </div>
+    <div class="wrapChoix bg-gray-900 grid p-10" v-show="isWrapChoixVisible">
+      <!-- Checkbox -->
+      <select v-model="selectedPlateforme" @change="filterTables">
+        <option value="tous">toutes les plateformes</option>
+        <option v-for="plateforme in plateformes" :key="plateforme" :value="plateforme">{{ plateforme }}</option>
+      </select>
 
-      </div>
+      <select v-model="selectedMonth" @change="filterTables">
+        <option value="tous">tous les mois</option>
+        <option v-for="month in months" :key="month" :value="month">{{ month }}</option>
+      </select>
+
+      <select v-model="selectedYear" @change="filterTables">
+        <option value="tous">toutes les années</option>
+        <option v-for="year in years" :key="year" :value="year">{{ year }}</option>
+      </select>
+      <input class="inputGap" v-model="searchText" @input="filterTables" placeholder="Rechercher..." />
+      <div class="checkbox-wrapper"><input type="checkbox" id="cbx-1" class="inp-cbx" v-model="columnVisibility.showPrixPaye" @click="toggleColumn('showPrixPaye')" style="display:none"/><label class="cbx" for="cbx-1"><span class="checkbox-custom"><svg width="12px" height="9px" viewBox="0 0 12 9"><polyline points="1 5 4 8 11 1"></polyline></svg></span><span class="label-text">Afficher Prix payé</span></label></div>
+      <div class="checkbox-wrapper"><input type="checkbox" id="cbx-2" class="inp-cbx" v-model="columnVisibility.showPrixBasMarche" @click="toggleColumn('showPrixBasMarche')" style="display:none"/><label class="cbx" for="cbx-2"><span class="checkbox-custom"><svg width="12px" height="9px" viewBox="0 0 12 9"><polyline points="1 5 4 8 11 1"></polyline></svg></span><span class="label-text">Afficher Prix marché noir</span></label></div>
+      <div class="checkbox-wrapper"><input type="checkbox" id="cbx-3" class="inp-cbx" v-model="columnVisibility.showPrixBas" @click="toggleColumn('showPrixBas')" style="display:none"/><label class="cbx" for="cbx-3"><span class="checkbox-custom"><svg width="12px" height="9px" viewBox="0 0 12 9"><polyline points="1 5 4 8 11 1"></polyline></svg></span><span class="label-text">Afficher Prix le plus bas</span></label></div>
+      <div class="checkbox-wrapper"><input type="checkbox" id="cbx-4" class="inp-cbx" v-model="columnVisibility.showPrixHorsSoldes" @click="toggleColumn('showPrixHorsSoldes')" style="display:none"/><label class="cbx" for="cbx-4"><span class="checkbox-custom"><svg width="12px" height="9px" viewBox="0 0 12 9"><polyline points="1 5 4 8 11 1"></polyline></svg></span><span class="label-text">Afficher Prix hors soldes</span></label></div>
+      <div class="checkbox-wrapper"><input type="checkbox" id="cbx-5" class="inp-cbx" v-model="columnVisibility.showHeuresJouees" @click="toggleColumn('showHeuresJouees')" style="display:none"/><label class="cbx" for="cbx-5"><span class="checkbox-custom"><svg width="12px" height="9px" viewBox="0 0 12 9"><polyline points="1 5 4 8 11 1"></polyline></svg></span><span class="label-text">Afficher heures jouées</span></label></div>
+      <div class="checkbox-wrapper"><input type="checkbox" id="cbx-6" class="inp-cbx" v-model="columnVisibility.showTag" @click="toggleColumn('showTag')" style="display:none"/><label class="cbx" for="cbx-6"><span class="checkbox-custom"><svg width="12px" height="9px" viewBox="0 0 12 9"><polyline points="1 5 4 8 11 1"></polyline></svg></span><span class="label-text">Afficher Tag</span></label></div>
+    </div>
+  </div>
 
     <!-- Tableau pour afficher le total de tous les totaux -->
     <table class="justify-center max-w-screen-2xl mx-auto p-5 text-white selectableTable">
       <thead>
         <tr>
           <th>Totaux</th>
-          <th>Prix payé</th>
+          <th v-if="columnVisibility.showPrixPaye">Prix payé</th>
           <th>Nombre de jeux</th>
-          <th>Heures jouées</th>
-          <th>Prix le plus bas (marché noir)</th>
-          <th>Prix le plus bas</th>
-          <th>Prix Hors soldes</th>
+          <th v-if="columnVisibility.showHeuresJouees">Heures jouées</th>
+          <th v-if="columnVisibility.showPrixBasMarche">Prix le plus bas (marché noir)</th>
+          <th v-if="columnVisibility.showPrixBas">Prix le plus bas</th>
+          <th v-if="columnVisibility.showPrixHorsSoldes">Prix Hors soldes</th>
         </tr>
       </thead>
       <tbody>
         <tr class="total bg-gray-900 w-full">
           <td>Total général</td>
-          <td class="currency"  :class="(calculateGrandTotalPrixPaye() > 0 && calculateGrandTotalPrixPaye() <= 25 ? 'green ' : '') + (calculateGrandTotalPrixPaye() > 25 && calculateGrandTotalPrixPaye() < 50 ? 'orange' : '') + (calculateGrandTotalPrixPaye() >= 50 ? 'red' : '')">{{ calculateGrandTotalPrixPaye() }}</td>
+          <td v-if="columnVisibility.showPrixPaye" class="currency"  :class="(calculateGrandTotalPrixPaye() > 0 && calculateGrandTotalPrixPaye() <= 25 ? 'green ' : '') + (calculateGrandTotalPrixPaye() > 25 && calculateGrandTotalPrixPaye() < 50 ? 'orange' : '') + (calculateGrandTotalPrixPaye() >= 50 ? 'red' : '')">{{ calculateGrandTotalPrixPaye() }}</td>
           <td class="nbjeux">{{ totalNumberOfGamesForVisibleTables() }}</td>
-          <td class="heures">{{ calculateGrandTotal('heuresJouees') }}</td>
-          <td class="currency">{{ calculateGrandTotal('prixbasmarche') }}</td>
-          <td class="currency">{{ calculateGrandTotal('prixbas') }}</td>
-          <td class="currency">{{ calculateGrandTotal('prixHorsSoldes') }}</td>
+          <td v-if="columnVisibility.showHeuresJouees" class="heures">{{ calculateGrandTotal('heuresJouees') }}</td>
+          <td v-if="columnVisibility.showPrixBasMarche" class="currency">{{ calculateGrandTotal('prixbasmarche') }}</td>
+          <td v-if="columnVisibility.showPrixBas" class="currency">{{ calculateGrandTotal('prixbas') }}</td>
+          <td v-if="columnVisibility.showPrixHorsSoldes" class="currency">{{ calculateGrandTotal('prixHorsSoldes') }}</td>
         </tr>
       </tbody>
       <tfoot>
-        <td>Ratio</td>
-        <td></td>
-        <td class="ratio" :class="(ratio(calculateGrandTotalPrixPaye(),totalNumberOfGamesForVisibleTables()) > 0 && ratio(calculateGrandTotalPrixPaye(),totalNumberOfGamesForVisibleTables()) <= 0.5 ? 'green ' : '') + (ratio(calculateGrandTotalPrixPaye(),totalNumberOfGamesForVisibleTables()) > 0.5 && ratio(calculateGrandTotalPrixPaye(),totalNumberOfGamesForVisibleTables()) < 1 ? 'orange' : '') + (ratio(calculateGrandTotalPrixPaye(),totalNumberOfGamesForVisibleTables()) >= 1 ? 'red' : '')">{{ ratio(calculateGrandTotalPrixPaye(),totalNumberOfGamesForVisibleTables()) }}€/jeu</td>
-        <td class="ratio" :class="(ratio(calculateGrandTotalPrixPaye(),calculateGrandTotal('heuresJouees')) > 0 && ratio(calculateGrandTotalPrixPaye(),calculateGrandTotal('heuresJouees')) <= 1 ? 'green ' : '') + (ratio(calculateGrandTotalPrixPaye(),calculateGrandTotal('heuresJouees')) > 1 && ratio(calculateGrandTotalPrixPaye(),calculateGrandTotal('heuresJouees')) < 2 ? 'orange' : '') + (ratio(calculateGrandTotalPrixPaye(),calculateGrandTotal('heuresJouees')) >= 2 ? 'red' : '')">{{ ratio(calculateGrandTotalPrixPaye(),calculateGrandTotal('heuresJouees')) }}€/h</td>
-        <td class="ratio" :class="(ratio(calculateGrandTotal('prixbasmarche'),calculateGrandTotalPrixPaye()) > 0 && ratio(calculateGrandTotal('prixbasmarche'),calculateGrandTotalPrixPaye()) <= 2 ? 'red ' : '') + (ratio(calculateGrandTotal('prixbasmarche'),calculateGrandTotalPrixPaye()) > 2 && ratio(calculateGrandTotal('prixbasmarche'),calculateGrandTotalPrixPaye()) < 5 ? 'orange' : '') + (ratio(calculateGrandTotal('prixbasmarche'),calculateGrandTotalPrixPaye()) >= 5 ? 'green' : '')">Cout * {{ ratio(calculateGrandTotal('prixbasmarche'),calculateGrandTotalPrixPaye()) }}</td>
-        <td class="ratio" :class="(ratio(calculateGrandTotal('prixbas'),calculateGrandTotalPrixPaye()) > 0 && ratio(calculateGrandTotal('prixbas'),calculateGrandTotalPrixPaye()) <= 2 ? 'red ' : '') + (ratio(calculateGrandTotal('prixbas'),calculateGrandTotalPrixPaye()) > 2 && ratio(calculateGrandTotal('prixbas'),calculateGrandTotalPrixPaye()) < 5 ? 'orange' : '') + (ratio(calculateGrandTotal('prixbas'),calculateGrandTotalPrixPaye()) >= 5 ? 'green' : '')">Cout * {{ ratio(calculateGrandTotal('prixbas'),calculateGrandTotalPrixPaye()) }}</td>
-        <td class="ratio" :class="(ratio(calculateGrandTotal('prixHorsSoldes'),calculateGrandTotalPrixPaye()) > 0 && ratio(calculateGrandTotal('prixHorsSoldes'),calculateGrandTotalPrixPaye()) <= 2 ? 'red ' : '') + (ratio(calculateGrandTotal('prixHorsSoldes'),calculateGrandTotalPrixPaye()) > 2 && ratio(calculateGrandTotal('prixHorsSoldes'),calculateGrandTotalPrixPaye()) < 5 ? 'orange' : '') + (ratio(calculateGrandTotal('prixHorsSoldes'),calculateGrandTotalPrixPaye()) >= 5 ? 'green' : '')">Cout * {{ ratio(calculateGrandTotal('prixHorsSoldes'),calculateGrandTotalPrixPaye()) }}</td>
+        <tr>
+          <td>Ratio</td>
+          <td></td>
+          <td v-if="columnVisibility.showPrixPaye" class="ratio" :class="(ratio(calculateGrandTotalPrixPaye(),totalNumberOfGamesForVisibleTables()) > 0 && ratio(calculateGrandTotalPrixPaye(),totalNumberOfGamesForVisibleTables()) <= 2.5 ? 'green ' : '') + (ratio(calculateGrandTotalPrixPaye(),totalNumberOfGamesForVisibleTables()) > 2.5 && ratio(calculateGrandTotalPrixPaye(),totalNumberOfGamesForVisibleTables()) < 4 ? 'orange' : '') + (ratio(calculateGrandTotalPrixPaye(),totalNumberOfGamesForVisibleTables()) >= 4 ? 'red' : '')">{{ ratio(calculateGrandTotalPrixPaye(),totalNumberOfGamesForVisibleTables()) }}€/jeu</td>
+          <td v-if="columnVisibility.showHeuresJouees" class="ratio" :class="(ratio(calculateGrandTotalPrixPaye(),calculateGrandTotal('heuresJouees')) > 0 && ratio(calculateGrandTotalPrixPaye(),calculateGrandTotal('heuresJouees')) <= 1 ? 'green ' : '') + (ratio(calculateGrandTotalPrixPaye(),calculateGrandTotal('heuresJouees')) > 1 && ratio(calculateGrandTotalPrixPaye(),calculateGrandTotal('heuresJouees')) < 2 ? 'orange' : '') + (ratio(calculateGrandTotalPrixPaye(),calculateGrandTotal('heuresJouees')) >= 2 ? 'red' : '')">{{ ratio(calculateGrandTotalPrixPaye(),calculateGrandTotal('heuresJouees')) }}€/h</td>
+          <td v-if="columnVisibility.showPrixBasMarche" class="ratio" :class="(ratio(calculateGrandTotal('prixbasmarche'),calculateGrandTotalPrixPaye()) > 0 && ratio(calculateGrandTotal('prixbasmarche'),calculateGrandTotalPrixPaye()) <= 2 ? 'red ' : '') + (ratio(calculateGrandTotal('prixbasmarche'),calculateGrandTotalPrixPaye()) > 2 && ratio(calculateGrandTotal('prixbasmarche'),calculateGrandTotalPrixPaye()) < 5 ? 'orange' : '') + (ratio(calculateGrandTotal('prixbasmarche'),calculateGrandTotalPrixPaye()) >= 5 ? 'green' : '')">Cout * {{ ratio(calculateGrandTotal('prixbasmarche'),calculateGrandTotalPrixPaye()) }}</td>
+          <td v-if="columnVisibility.showPrixBas" class="ratio" :class="(ratio(calculateGrandTotal('prixbas'),calculateGrandTotalPrixPaye()) > 0 && ratio(calculateGrandTotal('prixbas'),calculateGrandTotalPrixPaye()) <= 2 ? 'red ' : '') + (ratio(calculateGrandTotal('prixbas'),calculateGrandTotalPrixPaye()) > 2 && ratio(calculateGrandTotal('prixbas'),calculateGrandTotalPrixPaye()) < 5 ? 'orange' : '') + (ratio(calculateGrandTotal('prixbas'),calculateGrandTotalPrixPaye()) >= 5 ? 'green' : '')">Cout * {{ ratio(calculateGrandTotal('prixbas'),calculateGrandTotalPrixPaye()) }}</td>
+          <td v-if="columnVisibility.showPrixHorsSoldes" class="ratio" :class="(ratio(calculateGrandTotal('prixHorsSoldes'),calculateGrandTotalPrixPaye()) > 0 && ratio(calculateGrandTotal('prixHorsSoldes'),calculateGrandTotalPrixPaye()) <= 2 ? 'red ' : '') + (ratio(calculateGrandTotal('prixHorsSoldes'),calculateGrandTotalPrixPaye()) > 2 && ratio(calculateGrandTotal('prixHorsSoldes'),calculateGrandTotalPrixPaye()) < 5 ? 'orange' : '') + (ratio(calculateGrandTotal('prixHorsSoldes'),calculateGrandTotalPrixPaye()) >= 5 ? 'green' : '')">Cout * {{ ratio(calculateGrandTotal('prixHorsSoldes'),calculateGrandTotalPrixPaye()) }}</td>
+        </tr>
       </tfoot>
     </table>
 
@@ -65,17 +95,17 @@
             <tr>
               <th class="text-center">Move</th>
               <th class="text-left">Nom</th>
-              <th>Prix payé</th>
-              <th>Prix le plus bas (marché noir)</th>
-              <th>Prix le plus bas</th>
-              <th>Prix Hors soldes</th>
-              <th>Heures jouées</th>
-              <th class="text-center">Tag</th>
+              <th v-if="columnVisibility.showPrixPaye">Prix payé</th>
+              <th v-if="columnVisibility.showPrixBasMarche">Prix le plus bas (marché noir)</th>
+              <th v-if="columnVisibility.showPrixBas">Prix le plus bas</th>
+              <th v-if="columnVisibility.showPrixHorsSoldes">Prix Hors soldes</th>
+              <th v-if="columnVisibility.showHeuresJouees">Heures jouées</th>
+              <th v-if="columnVisibility.showTag" class="text-center">Tag</th>
               <th class="hideChild"  @click="toggleHideElements(table.id)" v-if="table.items.length > 1">{{ !table.hideElementsVisible ? 'Voir +' : 'Voir -' }}</th>
             </tr>
           </thead>
           <!-- <tbody v-if="table.items.length > 0"> -->
-            <draggable v-if="table.items.length > 0" tag="tbody" v-model="table.items" :options="dragOptions" handle=".draghandle" @end="handleDragEnd">
+            <draggable v-if="table.items.length > 0" tag="tbody" v-model="table.items" v-bind="dragOptions" handle=".draghandle" @end="handleDragEnd">
               <tr v-for="(item, rowIndex) in table.items" :key="rowIndex" >
                 <td class="draghandle"></td>
                 <td spellcheck="false" class="statut nopad baseWidth" :class="item.tag" :style="{ width: item.name.length * 9 + 'px'}">
@@ -87,12 +117,12 @@
                     :class="{ 'highlight': shouldHighlight(item.name, false) }"
                   />
                 </td>
-                <td class="currency">{{ calculatePrixPaye(table.cout, table.items.length) }}</td>
-                <td class="nopad currency"><input class="w-full" v-model="item.prixbasmarche" @input="fixDecimalSeparator(table.id, rowIndex, 'prixbasmarche')" placeholder="......" /></td>
-                <td class="nopad currency"><input class="w-full" v-model="item.prixbas" @input="fixDecimalSeparator(table.id, rowIndex, 'prixbas')" placeholder="......"/></td>
-                <td class="nopad currency"><input class="w-full" v-model="item.prixHorsSoldes"  @input="fixDecimalSeparator(table.id, rowIndex, 'prixHorsSoldes')" placeholder="......"/></td>
-                <td class="nopad heures"><input class="w-full" v-model="item.heuresJouees"  @input="fixDecimalSeparator(table.id, rowIndex, 'heuresJouees')" placeholder="......"/></td>
-                <td class="text-center">
+                <td v-if="columnVisibility.showPrixPaye" class="currency">{{ calculatePrixPaye(table.cout, table.items.length) }}</td>
+                <td v-if="columnVisibility.showPrixBasMarche" class="nopad currency"><input class="w-full" v-model="item.prixbasmarche" @input="fixDecimalSeparator(table.id, rowIndex, 'prixbasmarche')" placeholder="......" /></td>
+                <td v-if="columnVisibility.showPrixBas" class="nopad currency"><input class="w-full" v-model="item.prixbas" @input="fixDecimalSeparator(table.id, rowIndex, 'prixbas')" placeholder="......"/></td>
+                <td v-if="columnVisibility.showPrixHorsSoldes" class="nopad currency"><input class="w-full" v-model="item.prixHorsSoldes"  @input="fixDecimalSeparator(table.id, rowIndex, 'prixHorsSoldes')" placeholder="......"/></td>
+                <td v-if="columnVisibility.showHeuresJouees" class="nopad heures"><input class="w-full" v-model="item.heuresJouees"  @input="fixDecimalSeparator(table.id, rowIndex, 'heuresJouees')" placeholder="......"/></td>
+                <td v-if="columnVisibility.showTag" class="text-center">
                   <select v-model="item.tag" @change="saveDataLocally">
                     <option value="base">Base</option>
                     <option value="trade">Trade</option>
@@ -107,12 +137,12 @@
             <tr class="total bg-gray-900 w-full">
               <td></td>
               <td>Total</td>
-              <td class="nopad currency"><input class="w-full" v-model="table.cout" @input="saveDataLocally(table.id)" placeholder="Coût" /></td>
-              <td class="currency">{{ calculateTotal(table, 'prixbasmarche') }}</td>
-              <td class="currency">{{ calculateTotal(table, 'prixbas') }}</td>
-              <td class="currency">{{ calculateTotal(table, 'prixHorsSoldes') }}</td>
-              <td class="heures">{{ calculateTotal(table, 'heuresJouees') }}</td>
-              <td class="maxSize">Nombre de jeux : {{table.items.length}}</td>
+              <td v-if="columnVisibility.showPrixPaye" class="nopad currency"><input class="w-full" v-model="table.cout" @input="saveDataLocally(table.id)" placeholder="Coût" /></td>
+              <td v-if="columnVisibility.showPrixBasMarche" class="currency">{{ calculateTotal(table, 'prixbasmarche') }}</td>
+              <td v-if="columnVisibility.showPrixBas" class="currency">{{ calculateTotal(table, 'prixbas') }}</td>
+              <td v-if="columnVisibility.showPrixHorsSoldes" class="currency">{{ calculateTotal(table, 'prixHorsSoldes') }}</td>
+              <td v-if="columnVisibility.showHeuresJouees" class="heures">{{ calculateTotal(table, 'heuresJouees') }}</td>
+              <td v-if="columnVisibility.showTag" class="maxSize">Nombre de jeux : {{table.items.length}}</td>
               <td class="maxSize lastmodified">Modifié le {{table.lastModified}}</td>
             </tr>
             
@@ -182,6 +212,16 @@
         ],
         hideElementsVisible: true,
         searchText: '',
+        columnVisibility: {
+          showPrixPaye: true,
+          showPrixBasMarche: true,
+          showPrixBas:true,
+          showPrixHorsSoldes:true,
+          showHeuresJouees:true,
+          showTag:false,
+        },
+        isWrapChoixVisible: false,
+        
       };
     },
     computed: {
@@ -401,6 +441,25 @@
         }
 
         return this.searchText && itemName.toLowerCase().includes(this.searchText.toLowerCase());
+      },
+      //colonnes a afficher
+      toggleColumn(column) {
+        // Basculez l'état de la colonne dans l'objet columnVisibility
+        this.columnVisibility[column] = !this.columnVisibility[column];
+
+        // Mettez à jour la visibilité des colonnes dans toutes les tables
+        this.tables.forEach(table => {
+          table[column] = this.columnVisibility[column];
+        });
+
+        // Forcez la mise à jour de l'interface utilisateur
+        this.$forceUpdate();
+
+        // Sauvegardez les données localement
+        this.saveDataLocally();
+      },
+      toggleWrapChoix() {
+        this.isWrapChoixVisible = !this.isWrapChoixVisible;
       },
     },
     mounted() {
