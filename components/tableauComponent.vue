@@ -41,20 +41,9 @@
       <input class="inputGap" v-model="searchText" @input="filterTables" placeholder="Rechercher..." />
       <div v-for="column in columnsCreate" :key="column[0]">
         <div class="checkbox-wrapper">
-          <input
-            type="checkbox"
-            :id="'cbx-' + column[0]"
-            class="inp-cbx"
-            v-model="columnVisibility[column[0]]"
-            @click="toggleColumn(column[0])"
-            style="display:none"
-          />
+          <input type="checkbox" :id="'cbx-' + column[0]" class="inp-cbx" v-model="columnVisibility[column[0]]" @click="toggleColumn(column[0])" style="display:none"/>
           <label :for="'cbx-' + column[0]" class="cbx">
-            <span class="checkbox-custom">
-              <svg width="12px" height="9px" viewBox="0 0 12 9">
-                <polyline points="1 5 4 8 11 1"></polyline>
-              </svg>
-            </span>
+            <span class="checkbox-custom"><svg width="12px" height="9px" viewBox="0 0 12 9"> <polyline points="1 5 4 8 11 1"></polyline></svg></span>
             <span class="label-text">{{ column[1] }}</span>
           </label>
         </div>
@@ -64,12 +53,12 @@
   </div>
 
     <!-- Tableau pour afficher le total de tous les totaux -->
-    <table class="justify-center max-w-screen-2xl mx-auto p-5 text-white selectableTable">
+    <table v-if="!columnVisibility.UncheckAll" class="justify-center max-w-screen-2xl mx-auto p-5 text-white selectableTable">
       <thead>
         <tr>
           <th>Totaux</th>
           <th v-if="columnVisibility.showPrixPaye">Prix payé</th>
-          <th>Nombre de jeux</th>
+          <th v-if="columnVisibility.nombreJeux">Nombre de jeux</th>
           <th v-if="columnVisibility.showHeuresJouees">Heures jouées</th>
           <th v-if="columnVisibility.showPrixBasMarche">Prix le plus bas (marché noir)</th>
           <th v-if="columnVisibility.showPrixBas">Prix le plus bas</th>
@@ -80,18 +69,18 @@
         <tr class="total bg-gray-900 w-full">
           <td>Total général</td>
           <td v-if="columnVisibility.showPrixPaye" class="currency"  :class="(calculateGrandTotalPrixPaye() > 0 && calculateGrandTotalPrixPaye() <= 25 ? 'green ' : '') + (calculateGrandTotalPrixPaye() > 25 && calculateGrandTotalPrixPaye() < 50 ? 'orange' : '') + (calculateGrandTotalPrixPaye() >= 50 ? 'red' : '')">{{ calculateGrandTotalPrixPaye() }}</td>
-          <td class="nbjeux">{{ totalNumberOfGamesForVisibleTables() }}</td>
+          <td v-if="columnVisibility.nombreJeux" class="nbjeux">{{ totalNumberOfGamesForVisibleTables() }}</td>
           <td v-if="columnVisibility.showHeuresJouees" class="heures">{{ calculateGrandTotal('heuresJouees') }}</td>
           <td v-if="columnVisibility.showPrixBasMarche" class="currency">{{ calculateGrandTotal('prixbasmarche') }}</td>
           <td v-if="columnVisibility.showPrixBas" class="currency">{{ calculateGrandTotal('prixbas') }}</td>
           <td v-if="columnVisibility.showPrixHorsSoldes" class="currency">{{ calculateGrandTotal('prixHorsSoldes') }}</td>
         </tr>
       </tbody>
-      <tfoot>
+      <tfoot v-if="columnVisibility.Ratio">
         <tr>
           <td>Ratio</td>
-          <td></td>
-          <td v-if="columnVisibility.showPrixPaye" class="ratio" :class="(ratio(calculateGrandTotalPrixPaye(),totalNumberOfGamesForVisibleTables()) > 0 && ratio(calculateGrandTotalPrixPaye(),totalNumberOfGamesForVisibleTables()) <= 2.5 ? 'green ' : '') + (ratio(calculateGrandTotalPrixPaye(),totalNumberOfGamesForVisibleTables()) > 2.5 && ratio(calculateGrandTotalPrixPaye(),totalNumberOfGamesForVisibleTables()) < 4 ? 'orange' : '') + (ratio(calculateGrandTotalPrixPaye(),totalNumberOfGamesForVisibleTables()) >= 4 ? 'red' : '')">{{ ratio(calculateGrandTotalPrixPaye(),totalNumberOfGamesForVisibleTables()) }}€/jeu</td>
+          <td v-if="columnVisibility.showPrixPaye"></td>
+          <td v-if="columnVisibility.nombreJeux" class="ratio" :class="(ratio(calculateGrandTotalPrixPaye(),totalNumberOfGamesForVisibleTables()) > 0 && ratio(calculateGrandTotalPrixPaye(),totalNumberOfGamesForVisibleTables()) <= 2.5 ? 'green ' : '') + (ratio(calculateGrandTotalPrixPaye(),totalNumberOfGamesForVisibleTables()) > 2.5 && ratio(calculateGrandTotalPrixPaye(),totalNumberOfGamesForVisibleTables()) < 4 ? 'orange' : '') + (ratio(calculateGrandTotalPrixPaye(),totalNumberOfGamesForVisibleTables()) >= 4 ? 'red' : '')">{{ ratio(calculateGrandTotalPrixPaye(),totalNumberOfGamesForVisibleTables()) }}€/jeu</td>
           <td v-if="columnVisibility.showHeuresJouees" class="ratio" :class="(ratio(calculateGrandTotalPrixPaye(),calculateGrandTotal('heuresJouees')) > 0 && ratio(calculateGrandTotalPrixPaye(),calculateGrandTotal('heuresJouees')) <= 1 ? 'green ' : '') + (ratio(calculateGrandTotalPrixPaye(),calculateGrandTotal('heuresJouees')) > 1 && ratio(calculateGrandTotalPrixPaye(),calculateGrandTotal('heuresJouees')) < 2 ? 'orange' : '') + (ratio(calculateGrandTotalPrixPaye(),calculateGrandTotal('heuresJouees')) >= 2 ? 'red' : '')">{{ ratio(calculateGrandTotalPrixPaye(),calculateGrandTotal('heuresJouees')) }}€/h</td>
           <td v-if="columnVisibility.showPrixBasMarche" class="ratio" :class="(ratio(calculateGrandTotal('prixbasmarche'),calculateGrandTotalPrixPaye()) > 0 && ratio(calculateGrandTotal('prixbasmarche'),calculateGrandTotalPrixPaye()) <= 2 ? 'red ' : '') + (ratio(calculateGrandTotal('prixbasmarche'),calculateGrandTotalPrixPaye()) > 2 && ratio(calculateGrandTotal('prixbasmarche'),calculateGrandTotalPrixPaye()) < 5 ? 'orange' : '') + (ratio(calculateGrandTotal('prixbasmarche'),calculateGrandTotalPrixPaye()) >= 5 ? 'green' : '')">Cout * {{ ratio(calculateGrandTotal('prixbasmarche'),calculateGrandTotalPrixPaye()) }}</td>
           <td v-if="columnVisibility.showPrixBas" class="ratio" :class="(ratio(calculateGrandTotal('prixbas'),calculateGrandTotalPrixPaye()) > 0 && ratio(calculateGrandTotal('prixbas'),calculateGrandTotalPrixPaye()) <= 2 ? 'red ' : '') + (ratio(calculateGrandTotal('prixbas'),calculateGrandTotalPrixPaye()) > 2 && ratio(calculateGrandTotal('prixbas'),calculateGrandTotalPrixPaye()) < 5 ? 'orange' : '') + (ratio(calculateGrandTotal('prixbas'),calculateGrandTotalPrixPaye()) >= 5 ? 'green' : '')">Cout * {{ ratio(calculateGrandTotal('prixbas'),calculateGrandTotalPrixPaye()) }}</td>
@@ -102,7 +91,7 @@
 
       <div class="noborder p-5 justify-center max-w-screen-2xl mx-auto p-5 text-white" v-for="(table, tableIndex) in filteredTables" :key="tableIndex" :id="table.id">
         <div class="w-full p-10 text-center">
-          <textarea spellcheck="false" class="textCenter" v-model="table.tableText" @input="saveTableTextLocally(tableIndex)"></textarea>
+          <textarea spellcheck="false" class="textCenter nomTableau" v-model="table.tableText" @input="saveTableTextLocally(tableIndex)"></textarea>
           <textarea spellcheck="false" class="textCenter smallTextArea" v-model="table.tableText2" @input="saveTableTextLocally(tableIndex)"></textarea>
         </div>
         <table class="justify-center max-w-screen-2xl mx-auto p-5 text-white selectableTable" :class="[table.mois, { 'hideElements': !table.hideElementsVisible }]">
@@ -111,9 +100,9 @@
               <th class="text-center">Move</th>
               <th class="text-left">Nom</th>
               <th v-if="columnVisibility.showPrixPaye">Prix payé</th>
-              <th v-if="columnVisibility.showPrixBasMarche">Prix le plus bas (marché noir)</th>
-              <th v-if="columnVisibility.showPrixBas">Prix le plus bas</th>
-              <th v-if="columnVisibility.showPrixHorsSoldes">Prix Hors soldes</th>
+              <th v-if="columnVisibility.showPrixBasMarche">Marché noir</th>
+              <th v-if="columnVisibility.showPrixBas">Soldes</th>
+              <th v-if="columnVisibility.showPrixHorsSoldes">Hors soldes</th>
               <th v-if="columnVisibility.showHeuresJouees">Heures jouées</th>
               <th v-if="columnVisibility.showTag" class="text-center">Tag</th>
               <th v-if="columnVisibility.showActions && table.items.length > 1" class="hideChild"  @click="toggleHideElements(table.id)">{{ !table.hideElementsVisible ? 'Voir +' : 'Voir -' }}</th>
@@ -123,15 +112,7 @@
             <draggable v-if="table.items.length > 0" tag="tbody" v-model="table.items" v-bind="dragOptions" handle=".draghandle" @end="handleDragEnd">
               <tr v-for="(item, rowIndex) in table.items" :key="rowIndex" >
                 <td class="draghandle"></td>
-                <td spellcheck="false" class="statut nopad baseWidth" :class="item.tag" :style="{ width: item.name.length * 9 + 'px'}">
-                  <input
-                    class="w-full"
-                    v-model="item.name"
-                    @input="saveDataLocally(table.id)"
-                    placeholder="Nom du jeu"
-                    :class="{ 'highlight': shouldHighlight(item.name, false) }"
-                  />
-                </td>
+                <td spellcheck="false" class="statut nopad baseWidth" :class="item.tag" :style="{ width: item.name.length * 9 + 'px'}"><input class="w-full" v-model="item.name" @input="saveDataLocally(table.id)" placeholder="Nom du jeu" :class="{ 'highlight': shouldHighlight(item.name, false) }" /></td>
                 <td v-if="columnVisibility.showPrixPaye" class="currency">{{ calculatePrixPaye(table.cout, table.items.length) }}</td>
                 <td v-if="columnVisibility.showPrixBasMarche" class="nopad currency"><input class="w-full" v-model="item.prixbasmarche" @input="fixDecimalSeparator(table.id, rowIndex, 'prixbasmarche')" placeholder="......" /></td>
                 <td v-if="columnVisibility.showPrixBas" class="nopad currency"><input class="w-full" v-model="item.prixbas" @input="fixDecimalSeparator(table.id, rowIndex, 'prixbas')" placeholder="......"/></td>
@@ -151,7 +132,7 @@
               </tr>
             <tr class="total bg-gray-900 w-full">
               <td></td>
-              <td>Total : Nombre de jeux : {{table.items.length}}</td>
+              <td>Total : <span  v-if="columnVisibility.nombreJeux">Nombre de jeux : {{table.items.length}}</span></td>
               <td v-if="columnVisibility.showPrixPaye" class="nopad currency"><input class="w-full" v-model="table.cout" @input="saveDataLocally(table.id)" placeholder="Coût" /></td>
               <td v-if="columnVisibility.showPrixBasMarche" class="currency">{{ calculateTotal(table, 'prixbasmarche') }}</td>
               <td v-if="columnVisibility.showPrixBas" class="currency">{{ calculateTotal(table, 'prixbas') }}</td>
@@ -233,16 +214,25 @@
           showPrixBas:true,
           showPrixHorsSoldes:true,
           showHeuresJouees:true,
+          nombreJeux:true,
           showTag:false,
           showActions:false,
+          checkAll:false,
+          UncheckAll:false,
+          Ratio:false
         },
         columnsCreate : [
-          ['showPrixPaye', 'Afficher Prix payé'],
-          ['showPrixBasMarche', 'Afficher Prix marché'],
-          ['showPrixBas', 'Afficher Prix bas'],
-          ['showPrixHorsSoldes', 'Afficher Prix hors soldes'],
-          ['showHeuresJouees', 'Afficher Heures jouées'],
-          ['showTag', 'Afficher Tag']
+          ['checkAll', 'Check Tout'],
+          ['UncheckAll', 'Uncheck Tout'],
+          ['showPrixPaye', 'Prix payé'],
+          ['showPrixBasMarche', 'Prix marché noir'],
+          ['showPrixBas', 'Prix en soldes'],
+          ['showPrixHorsSoldes', 'Prix hors soldes'],
+          ['showHeuresJouees', 'Heures jouées'],
+          ['nombreJeux', 'Nombre de jeux'],
+          ['showActions', 'Actions'],
+          ['showTag', 'Tags'],
+          ['Ratio', 'Ratio']
         ],
         columnCreateVisibility: this.generateColumnVisibilityObject(['showPrixPaye', 'showPrixBasMarche', 'showPrixBas', 'showPrixHorsSoldes', 'showHeuresJouees', 'showTag']),
         isWrapChoixVisible: false,
@@ -477,22 +467,46 @@
 
         return this.searchText && itemName.toLowerCase().includes(this.searchText.toLowerCase());
       },
-      //colonnes a afficher
       toggleColumn(column) {
-        // Basculez l'état de la colonne dans l'objet columnVisibility
-        this.columnVisibility[column] = !this.columnVisibility[column];
+        //console.log(column);
+        if (column === "checkAll" || column === "UncheckAll") {
+          const targetValue = column === "UncheckAll" ? false : true;
 
-        // Mettez à jour la visibilité des colonnes dans toutes les tables
-        this.tables.forEach(table => {
-          table[column] = this.columnVisibility[column];
-        });
+          // Mettez à jour toutes les valeurs de columnVisibility
+          for (const key in this.columnVisibility) {
+            if (this.columnVisibility.hasOwnProperty(key)) {
+              this.columnVisibility[key] = targetValue;
+            }
+          }
+
+          // Mettez à jour la visibilité des colonnes dans toutes les tables
+          this.tables.forEach(table => {
+            table[column] = targetValue;
+          });
+
+          // Mettez à jour l'état de checkAll et UncheckAll en fonction de la colonne sélectionnée
+          this.columnVisibility.checkAll = column === "checkAll" ? true : false;
+          this.columnVisibility.UncheckAll = column === "UncheckAll" ? true : false;
+        } else {
+          // Basculez l'état de la colonne dans l'objet columnVisibility
+          this.columnVisibility[column] = !this.columnVisibility[column];
+
+          // Mettez à jour la visibilité de la colonne dans toutes les tables
+          this.tables.forEach(table => {
+            table[column] = this.columnVisibility[column];
+          });
+
+          // Vérifiez si toutes les colonnes sont cochées pour mettre à jour checkAll
+          this.columnVisibility.checkAll = Object.values(this.columnVisibility).every(value => value === true);
+
+          // Vérifiez si toutes les colonnes sont décochées pour mettre à jour UncheckAll
+          this.columnVisibility.UncheckAll = Object.values(this.columnVisibility).every(value => value === false);
+        }
 
         // Forcez la mise à jour de l'interface utilisateur
         this.$forceUpdate();
-
-        // Sauvegardez les données localement
-        this.saveDataLocally();
       },
+
       toggleWrapChoix() {
         this.isWrapChoixVisible = !this.isWrapChoixVisible;
       },
