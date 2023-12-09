@@ -199,6 +199,14 @@
     {
         cursor: initial;
     }
+    .triableTable
+    {
+        margin-top: 100Px;
+    }
+    .triableTable tbody>tr
+    {
+        display: contents;
+    }
     input,select,textarea
     {
         background: #fff0;  
@@ -280,6 +288,12 @@
     .checkboxTableauCalculator .wrapChoix
     {
         gap: 20Px;
+        overflow-y: scroll;
+        max-height: 100vh;
+    }
+    .wrapChoix::-webkit-scrollbar
+    {
+        width: 1Px;
     }
     .affichageWrapChoix
     {
