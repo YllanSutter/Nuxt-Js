@@ -118,14 +118,16 @@ export default {
     },
     calculateTotal(table, column) {
       let total = 0;
-      // Parcourez les éléments du tableau pour calculer le total en fonction de la colonne spécifiée
-      for (const item of table.items) {
+    
+      // Parcourez les éléments filtrés du tableau pour calculer le total en fonction de la colonne spécifiée
+      for (const item of table.filteredItems) {
         if (!isNaN(parseFloat(item[column]))) {
           total += parseFloat(item[column]);
         }
       }
+    
       return total.toFixed(2); // Assurez-vous d'obtenir deux décimales pour le total
-    },
+    },    
     calculatePrixPaye(cout, itemCount) {
       if (itemCount === 0) {
         return 0;
@@ -134,31 +136,38 @@ export default {
     },
     calculateGrandTotal(column) {
       let grandTotal = 0;
-
+    
       // Parcourez toutes les tables et additionnez les totaux de la colonne spécifiée
       for (const table of this.filteredTables) {
-        grandTotal += parseFloat(this.calculateTotal(table, column));
+        grandTotal += parseFloat(this.calculateTotal({
+          ...table,
+          items: table.filteredItems // Utiliser filteredItems au lieu de items
+        }, column));
       }
-
+    
       return grandTotal.toFixed(2);
     },
     calculateGrandTotalPrixPaye() {
       let grandTotalPrixPaye = 0;
-
-      // Parcourez toutes les tables
+    
+      // Calcul du coût total pour les éléments filtrés de toutes les tables
       for (const table of this.filteredTables) {
-        // Obtenez la valeur de "Coût" pour cette table
-        const tableCout = parseFloat(table.cout);
-
-        // Assurez-vous que la valeur est un nombre
-        if (!isNaN(tableCout)) {
-          grandTotalPrixPaye += tableCout;
+        const initialTableCost = parseFloat(table.cout); // Coût initial du tableau
+        const initialTableItemCount = table.items.length; // Nombre d'éléments du tableau initial
+        const filteredItemCount = table.filteredItems.length; // Nombre d'éléments filtrés
+    
+        if (!isNaN(initialTableCost) && initialTableItemCount > 0 && filteredItemCount > 0) {
+          // Calcul du coût moyen par élément pour le tableau initial
+          const costPerItem = initialTableCost / initialTableItemCount;
+    
+          // Calcul du coût total pour les éléments filtrés
+          grandTotalPrixPaye += costPerItem * filteredItemCount;
         }
       }
+    
       return grandTotalPrixPaye.toFixed(2);
     },
-    
-    
+
     ratio(column1, column2, column3) {
       let result = parseFloat(column1 / column2);
       if (!isNaN(result) && !isNaN(column3)) {
@@ -169,7 +178,7 @@ export default {
     totalNumberOfGamesForVisibleTables() {
       let total = 0;
       for (const table of this.filteredTables) {
-        total += table.items.length;
+        total += table.filteredItems.length;
       }
       return total;
     },
@@ -270,25 +279,44 @@ export default {
   },
   computed: {
     filteredTables() {
-        if (this.selectedMonth === 'tous' && this.selectedYear === 'tous' && this.selectedPlateforme === 'tous') {
-          return this.tables;
-        }
-
-        return this.tables.filter(table => {
-          const isMonthMatch = this.selectedMonth === 'tous' || table.mois === this.selectedMonth;
-          const isYearMatch = this.selectedYear === 'tous' || table.annee === this.selectedYear;
-          const isPlateformeMatch = this.selectedPlateforme === 'tous' || table.plateforme === this.selectedPlateforme;
-
-         // Ajoutez un filtre de recherche en fonction de this.searchText
-        const isSearchMatch = this.searchText === '' || 
-        table.items.some(item => item.name.toLowerCase().includes(this.searchText.toLowerCase())) ||
-        table.tableText.toLowerCase().includes(this.searchText.toLowerCase());
-
-
-          return isMonthMatch && isYearMatch && isPlateformeMatch && isSearchMatch;
+      if (this.selectedMonth === 'tous' && this.selectedYear === 'tous' && this.selectedPlateforme === 'tous') {
+        return this.tables.map(table => {
+          table.filteredItems = table.items.filter(item => {
+            const isTagMatch = this.selectedTag === 'tous' || item.tag === this.selectedTag;
+            const isSearchMatch = this.searchText === '' ||
+              item.name.toLowerCase().includes(this.searchText.toLowerCase()) ||
+              table.tableText.toLowerCase().includes(this.searchText.toLowerCase());
+            
+            return isTagMatch && isSearchMatch;
+          });
+          return table.filteredItems.length > 0 ? table : null;
+        }).filter(table => table !== null);
+      }
+    
+      return this.tables.map(table => {
+        const isMonthMatch = this.selectedMonth === 'tous' || table.mois === this.selectedMonth;
+        const isYearMatch = this.selectedYear === 'tous' || table.annee === this.selectedYear;
+        const isPlateformeMatch = this.selectedPlateforme === 'tous' || table.plateforme === this.selectedPlateforme;
+        const isTagMatch = this.selectedTag === 'tous' || table.items.some(item => item.tag === this.selectedTag);
+        const isSearchMatch = this.searchText === '' ||
+          table.items.some(item => item.name.toLowerCase().includes(this.searchText.toLowerCase())) ||
+          table.tableText.toLowerCase().includes(this.searchText.toLowerCase());
+        
+        table.filteredItems = table.items.filter(item => {
+          const isTagMatch = this.selectedTag === 'tous' || item.tag === this.selectedTag;
+          const isSearchMatch = this.searchText === '' ||
+            item.name.toLowerCase().includes(this.searchText.toLowerCase()) ||
+            table.tableText.toLowerCase().includes(this.searchText.toLowerCase());
+          
+          return isTagMatch && isSearchMatch;
         });
-      },
-    },
+    
+        return isMonthMatch && isYearMatch && isPlateformeMatch && table.filteredItems.length > 0 ? table : null;
+      }).filter(table => table !== null);
+    }
+    
+  },
+    
     filters: {
       currency(value) {
         return `${value} €`;

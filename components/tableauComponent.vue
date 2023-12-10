@@ -49,7 +49,7 @@
 
       <input class="inputGap" v-model="searchText" @input="filterTables" placeholder="Rechercher..." />
 
-      <div v-if="!showTableInOne" v-for="column in columnsCreate" :key="column[0]">
+      <div  v-for="column in columnsCreate" :key="column[0]">
         <div class="checkbox-wrapper">
           <input type="checkbox" :id="'cbx-' + column[0]" class="inp-cbx" v-model="columnVisibility[column[0]]" @click="toggleColumn(column[0])" style="display:none"/>
           <label :for="'cbx-' + column[0]" class="cbx">
@@ -59,23 +59,23 @@
         </div>
       </div>
 
-      <div v-if="!showTableInOne" class="checkbox-wrapper"><input type="checkbox" id="tab-cbx-1" class="inp-cbx" v-model="columnVisibility.hideAllElements" @click="hideAllElements()" style="display:none"/><label class="cbx" for="tab-cbx-1"><span class="checkbox-custom"><svg width="12px" height="9px" viewBox="0 0 12 9"><polyline points="1 5 4 8 11 1"></polyline></svg></span><span class="label-text">Réduire les tableaux</span></label></div>
       <div class="checkbox-wrapper"> <input type="checkbox" id="tab-cbx-2" class="inp-cbx" v-model="columnVisibility.showTableInOne" @click="toggleDisplayMode" style="display:none"/><label class="cbx" for="tab-cbx-2"><span class="checkbox-custom"><svg width="12px" height="9px" viewBox="0 0 12 9"><polyline points="1 5 4 8 11 1"></polyline></svg></span><span class="label-text">Un seul tableau</span></label></div>
+      <div v-if="!showTableInOne" class="checkbox-wrapper"><input type="checkbox" id="tab-cbx-1" class="inp-cbx" v-model="columnVisibility.hideAllElements" @click="hideAllElements()" style="display:none"/><label class="cbx" for="tab-cbx-1"><span class="checkbox-custom"><svg width="12px" height="9px" viewBox="0 0 12 9"><polyline points="1 5 4 8 11 1"></polyline></svg></span><span class="label-text">Réduire les tableaux</span></label></div>
       
     </div>
   </div>
 
     <!-- Tableau pour afficher le total de tous les totaux -->
-    <table v-if="!columnVisibility.UncheckAll && !showTableInOne" class="justify-center max-w-screen-2xl mx-auto p-5 text-white selectableTable">
+    <table v-if="!columnVisibility.UncheckAll" class="justify-center max-w-screen-2xl mx-auto p-5 text-white selectableTable">
       <thead>
         <tr>
           <th>Totaux</th>
           <th v-if="columnVisibility.showPrixPaye">Prix payé</th>
           <th v-if="columnVisibility.nombreJeux">Nombre de jeux</th>
           <th v-if="columnVisibility.showHeuresJouees">Heures jouées</th>
-          <th v-if="columnVisibility.showPrixBasMarche">Prix le plus bas (marché noir)</th>
-          <th v-if="columnVisibility.showPrixBas">Prix le plus bas</th>
-          <th v-if="columnVisibility.showPrixHorsSoldes">Prix Hors soldes</th>
+          <th v-if="columnVisibility.showPrixBasMarche">Marché noir</th>
+          <th v-if="columnVisibility.showPrixBas">Soldes</th>
+          <th v-if="columnVisibility.showPrixHorsSoldes">Hors soldes</th>
         </tr>
       </thead>
       <tbody>
@@ -120,8 +120,8 @@
           <!-- Boucle pour afficher les données de tous les tableaux -->
           <tr v-for="(table, tableIndex) in filteredTables" :key="tableIndex">
             <!-- Insérer ici les données spécifiques de chaque tableau -->
-            <template v-for="(item, rowIndex) in table.items" class="w-full">
-              <tr  class="w-full" v-if="selectedTag === 'tous' || item.tag === selectedTag">
+            <template v-for="(item, rowIndex) in table.filteredItems" class="w-full">
+              <tr  class="w-full">
                 <!-- Insérer ici les données spécifiques de chaque item -->
                 <td spellcheck="false" class="statut nopad baseWidth" :class="item.tag" :style="{ width: item.name.length * 9 + 'px'}"><input class="w-full" v-model="item.name" @input="saveDataLocally(table.id)" placeholder="Nom du jeu" :class="{ 'highlight': shouldHighlight(item.name, false) }" /></td>
                 <td v-if="columnVisibility.showPrixPaye" class="currency">{{ calculatePrixPaye(table.cout, table.items.length) }}</td>
@@ -167,7 +167,7 @@
           </thead>
           <!-- <tbody v-if="table.items.length > 0"> -->
             <draggable v-if="table.items.length > 0" tag="tbody" v-model="table.items" v-bind="dragOptions" handle=".draghandle" @end="handleDragEnd">
-              <tr v-for="(item, rowIndex) in table.items" :key="rowIndex" v-if="selectedTag === 'tous' || item.tag === selectedTag">
+              <tr v-for="(item, rowIndex) in table.filteredItems" :key="rowIndex" >
                 <td class="draghandle"></td>
                 <td spellcheck="false" class="statut nopad baseWidth" :class="item.tag" :style="{ width: item.name.length * 9 + 'px'}"><input class="w-full" v-model="item.name" @input="saveDataLocally(table.id)" placeholder="Nom du jeu" :class="{ 'highlight': shouldHighlight(item.name, false) }" /></td>
                 <td v-if="columnVisibility.showPrixPaye" class="currency">{{ calculatePrixPaye(table.cout, table.items.length) }}</td>
