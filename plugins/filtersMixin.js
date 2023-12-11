@@ -1,5 +1,91 @@
 import { saveData, loadData } from '~/data/dataHandler';
 export default {
+   data() {
+    return {
+      dragOptions: {
+        animation: 150, // Durée de l'animation de glissement en millisecondes
+      },
+      tables: [],
+      tableText: '',
+      tableText2: '',
+      lastTableId: 0,
+      lastModified:'',
+      currentMonth: '',
+      selectedYear: 'tous',
+      selectedMonth: 'tous', // Ajoutez cette propriété pour le filtre par mois
+      selectedPlateforme: 'tous', // Ajoutez cette propriété pour le filtre par mois
+      months: [ // Ajoutez cette propriété
+        "janvier", "février", "mars", "avril", "mai", "juin",
+        "juillet", "aout", "septembre", "octobre", "novembre", "décembre"
+      ],
+      plateformes: [ // Ajoutez cette propriété
+        "Autres", "Steam", "Fanatical", "Humble"
+      ],
+      years: [
+        2023,2024,2025
+      ],
+      hideElementsVisible: true,
+      searchText: '',
+      columnVisibility: {
+        showPrixPaye: true,
+        showPrixBasMarche: true,
+        showPrixBas:true,
+        showPrixHorsSoldes:true,
+        showHeuresJouees:true,
+        nombreJeux:true,
+        showTag:false,
+        showActions:false,
+        checkAll:false,
+        UncheckAll:false,
+        Ratio:false
+      },
+      columnsCreate : [
+        ['checkAll', 'Check Tout'],
+        ['UncheckAll', 'Uncheck Tout'],
+        ['showPrixPaye', 'Prix payé'],
+        ['showPrixBasMarche', 'Prix marché noir'],
+        ['showPrixBas', 'Prix en soldes'],
+        ['showPrixHorsSoldes', 'Prix hors soldes'],
+        ['showHeuresJouees', 'Heures jouées'],
+        ['nombreJeux', 'Nombre de jeux'],
+        ['showActions', 'Actions'],
+        ['showTag', 'Tags'],
+        ['Ratio', 'Ratio'],
+      ],
+      columnCreateVisibility: this.generateColumnVisibilityObject(['showPrixPaye', 'showPrixBasMarche', 'showPrixBas', 'showPrixHorsSoldes', 'showHeuresJouees', 'showTag']),
+      isWrapChoixVisible: false,
+      showElementsVisibleAll: true,
+      showTableInOne : false,
+      TagsList: ["base", "trade", "traded", "platine", "keep"],
+      selectedTag: 'tous', // Initialiser avec la première valeur par défaut
+    };
+  },
+  mounted() {
+    this.tables = loadData();
+    if (!this.tables || !Array.isArray(this.tables)) {
+      this.tables = [];
+    }
+    //On remet toutes les tables en visible
+    this.tables.forEach((table) => {
+      table.hideElementsVisible = true;
+    });
+    // Obtenir le mois actuel (par exemple, "janvier") et l'initialiser
+    const months = ["janvier", "février", "mars", "avril", "mai", "juin","juillet", "aout", "septembre", "octobre", "novembre", "décembre"];
+    
+    const currentDate = new Date();
+    this.currentMonth = months[currentDate.getMonth()];
+    this.selectedMonth = this.currentMonth; // Initialiser selectedMonth avec le mois actuel
+    //console.log(this.currentMonth)
+
+    // Obtenir l'année actuelle et l'initialiser
+    const currentYear = currentDate.getFullYear();
+    this.years = [currentYear - 1, currentYear, currentYear + 1]; // Vous pouvez personnaliser cette liste
+    this.selectedYear = currentYear; // Initialiser selectedYear avec "toutes" pour afficher toutes les années
+
+    //Obtenir la plateforme actuelle
+    const plateformes = ["Autres", "Steam", "Fanatical", "Humble"];
+    this.selectedPlateforme = "tous";
+  },
   
   methods: {
     saveDataLocally(tableId) {
@@ -24,9 +110,6 @@ export default {
       const selectedMonth = this.selectedMonth;
       const selectedYear = this.selectedYear;
       const selectedPlateforme = this.selectedPlateforme;
-      // Faites ce que vous voulez avec les valeurs sélectionnées
-      // console.log('Mois sélectionné :', selectedMonth);
-      // console.log('Année sélectionnée :', selectedYear);
       this.$forceUpdate();
     },
     filterByTag(tag) {
