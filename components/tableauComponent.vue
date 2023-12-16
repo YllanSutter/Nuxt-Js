@@ -198,6 +198,15 @@
               <td v-if="columnVisibility.showTag" class="maxSize"></td>
               <td v-if="columnVisibility.showActions" class="maxSize lastmodified">Modifié le {{table.lastModified}}</td>
             </tr>
+            <tr v-if="columnVisibility.Ratio">
+                <td>Ratio</td>
+                <td v-if="columnVisibility.showPrixPaye"></td>
+                <td v-if="columnVisibility.nombreJeux" class="ratio" :class="(ratio(table.cout,table.items.length) > 0 && ratio(table.cout,table.items.length) <= 2.5 ? 'green ' : '') + (ratio(table.cout,table.items.length) > 2.5 && ratio(calculateGrandTotalPrixPaye(),totalNumberOfGamesForVisibleTables()) < 4 ? 'orange' : '') + (ratio(calculateGrandTotalPrixPaye(),totalNumberOfGamesForVisibleTables()) >= 4 ? 'red' : '')">{{ ratio(table.cout,table.items.length) }}€/jeu</td>
+                <td v-if="columnVisibility.showPrixBasMarche" class="ratio" :class="(ratio(calculateTotal(table, 'prixbasmarche'),table.cout) > 0 && ratio(calculateTotal(table, 'prixbasmarche'),table.cout) <= 2 ? 'red ' : '') + (ratio(calculateTotal(table, 'prixbasmarche'),table.cout) > 2 && ratio(calculateTotal(table, 'prixbasmarche'),table.cout) < 5 ? 'orange' : '') + (ratio(calculateTotal(table, 'prixbasmarche'),table.cout) >= 5 ? 'green' : '')">Cout * {{ ratio(calculateTotal(table, 'prixbasmarche'),table.cout) }}</td>
+                <td v-if="columnVisibility.showPrixBas" class="ratio" :class="(ratio(calculateTotal(table, 'prixbas'),table.cout) > 0 && ratio(calculateTotal(table, 'prixbas'),table.cout) <= 2 ? 'red ' : '') + (ratio(calculateTotal(table, 'prixbas'),table.cout) > 2 && ratio(calculateTotal(table, 'prixbas'),table.cout) < 5 ? 'orange' : '') + (ratio(calculateTotal(table, 'prixbas'),table.cout) >= 5 ? 'green' : '')">Cout * {{ ratio(calculateTotal(table, 'prixbas'),table.cout) }}</td>
+                <td v-if="columnVisibility.showPrixHorsSoldes" class="ratio" :class="(ratio(calculateTotal(table, 'prixHorsSoldes'),table.cout) > 0 && ratio(calculateTotal(table, 'prixHorsSoldes'),table.cout) <= 2 ? 'red ' : '') + (ratio(calculateTotal(table, 'prixHorsSoldes'),table.cout) > 2 && ratio(calculateTotal(table, 'prixHorsSoldes'),table.cout) < 5 ? 'orange' : '') + (ratio(calculateTotal(table, 'prixHorsSoldes'),table.cout) >= 5 ? 'green' : '')">Cout * {{ ratio(calculateTotal(table, 'prixHorsSoldes'),table.cout) }}</td>
+                <td v-if="columnVisibility.showHeuresJouees" class="ratio" :class="(ratio(table.cout,calculateTotal(table, 'heuresJouees')) > 0 && ratio(table.cout,calculateTotal(table, 'heuresJouees')) <= 1 ? 'green ' : '') + (ratio(table.cout,calculateTotal(table, 'heuresJouees')) > 1 && ratio(table.cout,calculateTotal(table, 'heuresJouees')) < 2 ? 'orange' : '') + (ratio(table.cout,calculateTotal(table, 'heuresJouees')) >= 2 ? 'red' : '')">{{ ratio(table.cout,calculateTotal(table, 'heuresJouees')) }}€/h</td>
+            </tr>
             
           </draggable>
           <!-- </tbody> -->
@@ -242,6 +251,92 @@
   mixins: [filtersMixin],
     components: {
       draggable, // Ajoutez le composant vuedraggable
+    },
+    data() {
+      return {
+        dragOptions: {
+          animation: 150, // Durée de l'animation de glissement en millisecondes
+        },
+        tables: [],
+        tableText: '',
+        tableText2: '',
+        lastTableId: 0,
+        lastModified:'',
+        currentMonth: '',
+        selectedYear: 'tous',
+        selectedMonth: 'tous', // Ajoutez cette propriété pour le filtre par mois
+        selectedPlateforme: 'tous', // Ajoutez cette propriété pour le filtre par mois
+        months: [ // Ajoutez cette propriété
+          "janvier", "février", "mars", "avril", "mai", "juin",
+          "juillet", "aout", "septembre", "octobre", "novembre", "décembre"
+        ],
+        plateformes: [ // Ajoutez cette propriété
+          "Autres", "Steam", "Fanatical", "Humble"
+        ],
+        years: [
+          2023,2024,2025
+        ],
+        hideElementsVisible: true,
+        searchText: '',
+        columnVisibility: {
+          showPrixPaye: true,
+          showPrixBasMarche: true,
+          showPrixBas:true,
+          showPrixHorsSoldes:true,
+          showHeuresJouees:true,
+          nombreJeux:true,
+          showTag:false,
+          showActions:false,
+          checkAll:false,
+          UncheckAll:false,
+          Ratio:false
+        },
+        columnsCreate : [
+          ['checkAll', 'Check Tout'],
+          ['UncheckAll', 'Uncheck Tout'],
+          ['showPrixPaye', 'Prix payé'],
+          ['showPrixBasMarche', 'Prix marché noir'],
+          ['showPrixBas', 'Prix en soldes'],
+          ['showPrixHorsSoldes', 'Prix hors soldes'],
+          ['showHeuresJouees', 'Heures jouées'],
+          ['nombreJeux', 'Nombre de jeux'],
+          ['showActions', 'Actions'],
+          ['showTag', 'Tags'],
+          ['Ratio', 'Ratio'],
+        ],
+        columnCreateVisibility: this.generateColumnVisibilityObject(['showPrixPaye', 'showPrixBasMarche', 'showPrixBas', 'showPrixHorsSoldes', 'showHeuresJouees', 'showTag']),
+        isWrapChoixVisible: false,
+        showElementsVisibleAll: true,
+        showTableInOne : false,
+        TagsList: ["base", "trade", "traded", "platine", "keep"],
+        selectedTag: 'tous', // Initialiser avec la première valeur par défaut
+      };
+    },
+    mounted() {
+      this.tables = loadData();
+      if (!this.tables || !Array.isArray(this.tables)) {
+        this.tables = [];
+      }
+      //On remet toutes les tables en visible
+      this.tables.forEach((table) => {
+        table.hideElementsVisible = true;
+      });
+      // Obtenir le mois actuel (par exemple, "janvier") et l'initialiser
+      const months = ["janvier", "février", "mars", "avril", "mai", "juin","juillet", "aout", "septembre", "octobre", "novembre", "décembre"];
+      
+      const currentDate = new Date();
+      this.currentMonth = months[currentDate.getMonth()];
+      this.selectedMonth = this.currentMonth; // Initialiser selectedMonth avec le mois actuel
+      //console.log(this.currentMonth)
+
+      // Obtenir l'année actuelle et l'initialiser
+      const currentYear = currentDate.getFullYear();
+      this.years = [currentYear - 1, currentYear, currentYear + 1]; // Vous pouvez personnaliser cette liste
+      this.selectedYear = currentYear; // Initialiser selectedYear avec "toutes" pour afficher toutes les années
+
+      //Obtenir la plateforme actuelle
+      const plateformes = ["Autres", "Steam", "Fanatical", "Humble"];
+      this.selectedPlateforme = "tous";
     },
   };
   </script>

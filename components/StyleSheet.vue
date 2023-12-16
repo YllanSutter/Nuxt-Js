@@ -472,5 +472,62 @@
     {
         border-left:3px solid #af8303;
     }
+    
+    /* STATS */
+    .bar-chart {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        position: relative;
+        height: 200px;
+        max-width: 1000Px;
+        padding-bottom: 0;
+        padding-top: 0;
+        margin-top: 70px;
+        background: #ffffff22;
+    }
+    .bar-chart h2
+    {
+        background: #fff0!important;
+    }
+    .bar {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 30px; /* Largeur des barres */
+        position: relative;
+    }
+
+    .bar-inner {
+        width: 100%;
+        min-height: 25px;
+    }
+
+    .bar span {
+        margin-top: 5px;
+        position: absolute;
+        bottom: -30px;
+        left: 50%;
+        transform:translateX(-50%);
+    }
+    .barlines,.barlines>*
+    {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+    }
+    .barlines>*
+    {
+        height: 25%;
+        border-top: 1Px solid #fff;
+        opacity: 0.2;
+    }
+    .barlines>*:nth-child(2){top: 25%;}
+    .barlines>*:nth-child(3){top: 50%;}
+    .barlines>*:nth-child(4){top: 75%;}
+    .barlines>*:nth-child(5){top: 100%;}
 
 </style>
