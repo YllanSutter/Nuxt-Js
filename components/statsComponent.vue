@@ -30,12 +30,6 @@
           <option value="tous">toutes les années</option>
           <option v-for="year in years" :key="year" :value="year">{{ year }}</option>
         </select>
-        
-        <!-- Sélection des tags -->
-        <select v-model="selectedTag" @change="filterByTag">
-          <option value="tous">Tous les tags</option>
-          <option v-for="tag in TagsList" :key="tag" :value="tag">{{ tag }}</option>
-        </select>
     
         <div  v-for="column in columnsCreate" :key="column[0]">
           <div class="checkbox-wrapper">
