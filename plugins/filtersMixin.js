@@ -42,14 +42,17 @@ export default {
         if (table.items && table.items[rowIndex]) {
           const value = table.items[rowIndex][columnName];
           
-          // Remplacez les virgules par des points
-          const fixedValue = value.replace(',', '.');
+          if(value)
+          {
+            // Remplacez les virgules par des points
+            const fixedValue = value.replace(',', '.');
 
-          // Mettez à jour la valeur dans le tableau
-          this.$set(table.items[rowIndex], columnName, fixedValue);
+            // Mettez à jour la valeur dans le tableau
+            this.$set(table.items[rowIndex], columnName, fixedValue);
 
-          // Sauvegardez les données localement
-          this.saveDataLocally(tableId);
+            // Sauvegardez les données localement
+            this.saveDataLocally(tableId);
+          }          
         }
       }
     },
@@ -165,9 +168,13 @@ export default {
     },
 
     ratio(column1, column2, column3) {
-      let result = parseFloat(column1 / column2);
+      let result = parseFloat(column1 / column2);ez
       if (!isNaN(result) && !isNaN(column3)) {
         result /= parseFloat(column3);
+      }
+      if(result >= column1)
+      {
+        result = parseFloat(column1);
       }
       return isNaN(result) ? 0 : result.toFixed(2);
     },

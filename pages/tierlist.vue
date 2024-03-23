@@ -3,6 +3,11 @@
     <Entete/>
     <StyleSheet/>
     <h1>Tier List! 👋</h1>
+    <!-- steamapikey : 7AEBB6C629BC5A5CE294B96F09881111 https://steamcommunity.com/dev/apikey-->
+    <!-- Afficher vos jeux ici -->
+    <ul>
+      <li v-for="game in games" :key="game.appid">{{ game.name }}</li>
+    </ul>
   </div>
 </template>
 
@@ -10,6 +15,7 @@
 import Entete from '~/components/entete';
 import StyleSheet from '~/components/StyleSheet.vue';
 import listGameData from '~/static/listGame.json';  // Renommez la constante locale ici
+import { getOwnedGames } from '~/services/steamApiService';
 
 export default {
   components: {
@@ -25,6 +31,12 @@ export default {
         // Ajoutez d'autres filtres ici avec le même format
       },
     };
+  },
+  async created() {
+    // Remplacer 'VOTRE_STEAM_ID' par votre propre identifiant Steam
+    const steamId = '76561198121075558';
+    // Appeler le service API pour obtenir la liste des jeux
+    this.games = await getOwnedGames(steamId);
   },
   computed: {
     filteredGames() {

@@ -26,10 +26,10 @@ export default {
             this.filteredTables.forEach((table) => {
                 const month = table.mois;
         
-                const totalPrixHorsSoldes = table.filteredItems.reduce((acc, item) => acc + parseFloat(item.prixHorsSoldes || 0), 0);
-                const totalPrixBas = table.filteredItems.reduce((acc, item) => acc + parseFloat(item.prixbas || 0), 0);
-                const totalPrixMarcheNoir = table.filteredItems.reduce((acc, item) => acc + parseFloat(item.prixbasmarche || 0), 0);
-                const totalHoursPlayed = table.filteredItems.reduce((acc, item) => acc + (parseFloat(item.heuresJouees) || 0), 0);
+                const totalPrixHorsSoldes = table.filteredItems.reduce((acc, filteredItems) => acc + parseFloat(filteredItems.prixHorsSoldes || 0), 0);
+                const totalPrixBas = table.filteredItems.reduce((acc, filteredItems) => acc + parseFloat(filteredItems.prixbas || 0), 0);
+                const totalPrixMarcheNoir = table.filteredItems.reduce((acc, filteredItems) => acc + parseFloat(filteredItems.prixbasmarche || 0), 0);
+                const totalHoursPlayed = table.filteredItems.reduce((acc, filteredItems) => acc + (parseFloat(filteredItems.heuresJouees) || 0), 0);
                 const totalnombreJeux = table.filteredItems.length;
         
                 // Calcul du coût total à partir de table.cout

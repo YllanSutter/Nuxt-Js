@@ -16,6 +16,12 @@
         <option value="tous">toutes les années</option>
         <option v-for="year in years" :key="year" :value="year">{{ year }}</option>
       </select>
+
+      <select v-model="selectedTag" @change="filterByTag">
+        <option value="tous">Tous les tags</option>
+        <option v-for="tag in TagsList" :key="tag" :value="tag">{{ tag }}</option>
+      </select>
+      
       <input class="inputGap" v-model="searchText" @input="filterTables" placeholder="Rechercher..." />
     </div>
 
@@ -331,7 +337,7 @@
 
       // Obtenir l'année actuelle et l'initialiser
       const currentYear = currentDate.getFullYear();
-      this.years = [currentYear - 1, currentYear, currentYear + 1]; // Vous pouvez personnaliser cette liste
+      this.years = [currentYear - 2,currentYear - 1, currentYear, currentYear + 1]; // Vous pouvez personnaliser cette liste
       this.selectedYear = currentYear; // Initialiser selectedYear avec "toutes" pour afficher toutes les années
 
       //Obtenir la plateforme actuelle
