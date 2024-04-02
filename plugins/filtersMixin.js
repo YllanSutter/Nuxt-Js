@@ -168,7 +168,7 @@ export default {
     },
 
     ratio(column1, column2, column3) {
-      let result = parseFloat(column1 / column2);ez
+      let result = parseFloat(column1 / column2);
       if (!isNaN(result) && !isNaN(column3)) {
         result /= parseFloat(column3);
       }
